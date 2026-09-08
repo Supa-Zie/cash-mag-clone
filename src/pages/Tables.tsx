@@ -1,318 +1,215 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { UtensilsCrossed, Users, Clock, DollarSign, Check, X, Edit2, Plus, Minus, ChefHat } from 'lucide-react';
+import { UtensilsCrossed, Users, Clock, DollarSign, Check, X, Plus } from 'lucide-react';
+
+interface Table {
+  id: string;
+  number: number;
+  seats: number;
+  status: 'available' | 'occupied' | 'reserved' | 'cleaning';
+  customer?: string;
+  orderTotal?: number;
+  since?: string;
+  zone: 'terrace' | 'main' | 'bar' | 'private';
+}
 
 export default function Tables() {
-  const { t, tables, setTables } = useApp();
-  const [zoneFilter, setZoneFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'occupied' | 'reserved' | 'bill-requested'>('all');
-  const [selectedTable, setSelectedTable] = useState<string | null>(null);
+  const { t } = useApp();
+  const [selectedTable, setSelectedTable] = useState<Table | null>(null);
+  const [zoneFilter, setZoneFilter] = useState<string>('all');
 
-  const zones = [...new Set(tables.map(t => t.zone))];
+  const [tables, setTables] = useState<Table[]>([
+    { id: '1', number: 1, seats: 2, status: 'available', zone: 'terrace' },
+    { id: '2', number: 2, seats: 2, status: 'occupied', customer: 'M. Dupont', orderTotal: 45.50, since: '12:30', zone: 'terrace' },
+    { id: '3', number: 3, seats: 4, status: 'occupied', customer: 'Mme. Blanc', orderTotal: 78.20, since: '12:15', zone: 'terrace' },
+    { id: '4', number: 4, seats: 4, status: 'reserved', customer: 'Famille Rochat', zone: 'main' },
+    { id: '5', number: 5, seats: 6, status: 'available', zone: 'main' },
+    { id: '6', number: 6, seats: 4, status: 'occupied', customer: 'M. Martin', orderTotal: 32.80, since: '13:00', zone: 'main' },
+    { id: '7', number: 7, seats: 2, status: 'cleaning', zone: 'main' },
+    { id: '8', number: 8, seats: 8, status: 'available', zone: 'private' },
+    { id: '9', number: 9, seats: 4, status: 'occupied', customer: 'Mme. Favre', orderTotal: 56.00, since: '12:45', zone: 'main' },
+    { id: '10', number: 10, seats: 2, status: 'available', zone: 'bar' },
+    { id: '11', number: 11, seats: 2, status: 'occupied', customer: 'M. Weber', orderTotal: 18.50, since: '13:15', zone: 'bar' },
+    { id: '12', number: 12, seats: 6, status: 'reserved', customer: 'Anniv. Moreau', zone: 'private' },
+  ]);
 
-  const filteredTables = tables.filter(table => {
-    const matchesZone = zoneFilter === 'all' || table.zone === zoneFilter;
-    const matchesStatus = statusFilter === 'all' || table.status === statusFilter;
-    return matchesZone && matchesStatus;
-  });
+  const filteredTables = zoneFilter === 'all' ? tables : tables.filter(t => t.zone === zoneFilter);
 
-  const availableCount = tables.filter(t => t.status === 'available').length;
-  const occupiedCount = tables.filter(t => t.status === 'occupied').length;
-  const reservedCount = tables.filter(t => t.status === 'reserved').length;
-  const billCount = tables.filter(t => t.status === 'bill-requested').length;
-  const totalRevenue = tables.filter(t => t.currentOrder).reduce((sum, t) => sum + (t.currentOrder?.total || 0), 0);
+  const stats = {
+    available: tables.filter(t => t.status === 'available').length,
+    occupied: tables.filter(t => t.status === 'occupied').length,
+    reserved: tables.filter(t => t.status === 'reserved').length,
+    cleaning: tables.filter(t => t.status === 'cleaning').length,
+    totalRevenue: tables.reduce((sum, t) => sum + (t.orderTotal || 0), 0),
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'available': return 'bg-emerald-50 border-emerald-200 hover:border-emerald-400';
-      case 'occupied': return 'bg-blue-50 border-blue-200 hover:border-blue-400';
-      case 'reserved': return 'bg-amber-50 border-amber-200 hover:border-amber-400';
-      case 'bill-requested': return 'bg-red-50 border-red-200 hover:border-red-400';
-      default: return 'bg-slate-50 border-slate-200';
-    }
-  };
-
-  const getStatusDot = (status: string) => {
-    switch (status) {
       case 'available': return 'bg-emerald-500';
-      case 'occupied': return 'bg-blue-500';
-      case 'reserved': return 'bg-amber-500';
-      case 'bill-requested': return 'bg-red-500 animate-pulse';
-      default: return 'bg-slate-500';
+      case 'occupied': return 'bg-red-500';
+      case 'reserved': return 'bg-blue-500';
+      case 'cleaning': return 'bg-amber-500';
+      default: return 'bg-slate-400';
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'available': return 'Disponible';
+      case 'available': return 'Libre';
       case 'occupied': return 'Occupée';
       case 'reserved': return 'Réservée';
-      case 'bill-requested': return 'Addition demandée';
+      case 'cleaning': return 'Nettoyage';
       default: return status;
     }
   };
 
-  const updateTableStatus = (tableId: string, newStatus: 'available' | 'occupied' | 'reserved' | 'bill-requested') => {
-    setTables(prev => prev.map(t => {
-      if (t.id === tableId) {
-        if (newStatus === 'available') {
-          return { ...t, status: newStatus, currentOrder: undefined };
-        }
-        return { ...t, status: newStatus };
-      }
-      return t;
-    }));
+  const getZoneLabel = (zone: string) => {
+    switch (zone) {
+      case 'terrace': return 'Terrasse';
+      case 'main': return 'Salle';
+      case 'bar': return 'Bar';
+      case 'private': return 'Privé';
+      default: return zone;
+    }
   };
 
-  const selectedTableData = selectedTable ? tables.find(t => t.id === selectedTable) : null;
+  const updateTableStatus = (tableId: string, newStatus: Table['status']) => {
+    setTables(prev => prev.map(t =>
+      t.id === tableId
+        ? { ...t, status: newStatus, customer: undefined, orderTotal: undefined, since: undefined }
+        : t
+    ));
+    setSelectedTable(null);
+  };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
+    <div className="p-6 space-y-6 overflow-y-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-            <UtensilsCrossed className="text-emerald-600" />
-            {t('tables')}
-          </h1>
-          <p className="text-slate-500 text-sm mt-1">Gestion des tables — Restaurant</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-lg">
-            <span className="text-sm font-medium text-emerald-700">{availableCount} tables libres</span>
-          </div>
+          <h1 className="text-2xl font-bold text-slate-800">{t('tables')}</h1>
+          <p className="text-slate-500 text-sm">Plan de salle et gestion des tables</p>
         </div>
       </div>
 
-      {/* KPI Cards */}
+      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-emerald-500" />
-            <span className="text-xs text-slate-500">Disponibles</span>
+        <div className="bg-white rounded-xl p-4 border border-slate-200">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center"><Check size={20} className="text-emerald-600" /></div>
+            <div><p className="text-2xl font-bold text-slate-800">{stats.available}</p><p className="text-xs text-slate-500">Libres</p></div>
           </div>
-          <p className="text-2xl font-bold text-slate-800 mt-1">{availableCount}</p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-xs text-slate-500">Occupées</span>
+        <div className="bg-white rounded-xl p-4 border border-slate-200">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center"><Users size={20} className="text-red-600" /></div>
+            <div><p className="text-2xl font-bold text-slate-800">{stats.occupied}</p><p className="text-xs text-slate-500">Occupées</p></div>
           </div>
-          <p className="text-2xl font-bold text-slate-800 mt-1">{occupiedCount}</p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-amber-500" />
-            <span className="text-xs text-slate-500">Réservées</span>
+        <div className="bg-white rounded-xl p-4 border border-slate-200">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center"><Clock size={20} className="text-blue-600" /></div>
+            <div><p className="text-2xl font-bold text-slate-800">{stats.reserved}</p><p className="text-xs text-slate-500">Réservées</p></div>
           </div>
-          <p className="text-2xl font-bold text-slate-800 mt-1">{reservedCount}</p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-xs text-slate-500">Additions</span>
+        <div className="bg-white rounded-xl p-4 border border-slate-200">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center"><UtensilsCrossed size={20} className="text-amber-600" /></div>
+            <div><p className="text-2xl font-bold text-slate-800">{stats.cleaning}</p><p className="text-xs text-slate-500">Nettoyage</p></div>
           </div>
-          <p className="text-2xl font-bold text-slate-800 mt-1">{billCount}</p>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
-          <div className="flex items-center gap-2">
-            <DollarSign size={14} className="text-emerald-600" />
-            <span className="text-xs text-slate-500">CA en cours</span>
-          </div>
-          <p className="text-2xl font-bold text-emerald-600 mt-1">{totalRevenue.toFixed(0)} CHF</p>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
-        <div className="flex flex-wrap gap-4">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setZoneFilter('all')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${zoneFilter === 'all' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-            >
-              Toutes les zones
-            </button>
-            {zones.map(zone => (
-              <button
-                key={zone}
-                onClick={() => setZoneFilter(zone)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${zoneFilter === zone ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-              >
-                {zone}
-              </button>
-            ))}
-          </div>
-          <div className="flex gap-2 ml-auto">
-            {(['all', 'available', 'occupied', 'reserved', 'bill-requested'] as const).map(status => (
-              <button
-                key={status}
-                onClick={() => setStatusFilter(status)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${statusFilter === status ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-              >
-                {status === 'all' ? 'Tout' : getStatusLabel(status)}
-              </button>
-            ))}
+        <div className="bg-white rounded-xl p-4 border border-slate-200">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center"><DollarSign size={20} className="text-purple-600" /></div>
+            <div><p className="text-2xl font-bold text-slate-800">{stats.totalRevenue.toFixed(0)}</p><p className="text-xs text-slate-500">CHF en cours</p></div>
           </div>
         </div>
       </div>
 
-      {/* Floor Plan */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-        {filteredTables.map((table) => (
-          <button
-            key={table.id}
-            onClick={() => setSelectedTable(table.id)}
-            className={`relative rounded-xl p-4 border-2 transition-all ${getStatusColor(table.status)} ${selectedTable === table.id ? 'ring-2 ring-emerald-500 ring-offset-2' : ''}`}
-          >
-            {/* Status indicator */}
-            <div className={`absolute top-2 right-2 w-2.5 h-2.5 rounded-full ${getStatusDot(table.status)}`} />
-
-            {/* Table number */}
-            <div className="text-center">
-              <div className="w-12 h-12 mx-auto bg-white/80 rounded-full flex items-center justify-center mb-2 shadow-sm">
-                <span className="text-xl font-bold text-slate-800">{table.number}</span>
-              </div>
-              <p className="text-xs font-medium text-slate-600">{table.zone}</p>
-              <div className="flex items-center justify-center gap-1 mt-1">
-                <Users size={12} className="text-slate-400" />
-                <span className="text-xs text-slate-500">{table.seats} places</span>
-              </div>
-            </div>
-
-            {/* Order info */}
-            {table.currentOrder && (
-              <div className="mt-2 pt-2 border-t border-slate-200/50">
-                <p className="text-xs font-medium text-slate-700">{table.currentOrder.total.toFixed(2)} CHF</p>
-                <p className="text-xs text-slate-500 truncate">{table.currentOrder.server}</p>
-              </div>
-            )}
-
-            {/* Bill requested badge */}
-            {table.status === 'bill-requested' && (
-              <div className="absolute -top-2 -left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
-                🔔
-              </div>
-            )}
+      {/* Zone Filter */}
+      <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg p-1 w-fit">
+        {['all', 'terrace', 'main', 'bar', 'private'].map((zone) => (
+          <button key={zone} onClick={() => setZoneFilter(zone)}
+            className={`px-4 py-2 rounded text-sm font-medium transition-all ${
+              zoneFilter === zone ? 'bg-emerald-100 text-emerald-700' : 'text-slate-500 hover:text-slate-700'
+            }`}>
+            {zone === 'all' ? 'Toutes' : getZoneLabel(zone)}
           </button>
         ))}
       </div>
 
-      {filteredTables.length === 0 && (
-        <div className="text-center py-12">
-          <UtensilsCrossed size={48} className="mx-auto text-slate-300 mb-4" />
-          <p className="text-slate-500">Aucune table trouvée</p>
-        </div>
-      )}
+      {/* Table Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {filteredTables.map((table) => (
+          <button
+            key={table.id}
+            onClick={() => setSelectedTable(table)}
+            className={`relative rounded-xl p-4 border-2 transition-all hover:shadow-md ${
+              table.status === 'available' ? 'border-emerald-200 bg-emerald-50 hover:border-emerald-400' :
+              table.status === 'occupied' ? 'border-red-200 bg-red-50 hover:border-red-400' :
+              table.status === 'reserved' ? 'border-blue-200 bg-blue-50 hover:border-blue-400' :
+              'border-amber-200 bg-amber-50 hover:border-amber-400'
+            }`}
+          >
+            <div className={`absolute top-2 right-2 w-2.5 h-2.5 rounded-full ${getStatusColor(table.status)}`} />
+            <p className="text-2xl font-bold text-slate-800">T{table.number}</p>
+            <p className="text-xs text-slate-500 mt-1">{table.seats} places</p>
+            <p className="text-xs text-slate-400 mt-0.5">{getZoneLabel(table.zone)}</p>
+            {table.customer && <p className="text-xs text-slate-600 mt-2 font-medium truncate">{table.customer}</p>}
+            {table.orderTotal && <p className="text-xs font-bold text-slate-800 mt-1">{table.orderTotal.toFixed(2)} CHF</p>}
+            {table.since && <p className="text-xs text-slate-400">depuis {table.since}</p>}
+          </button>
+        ))}
+      </div>
 
       {/* Table Detail Modal */}
-      {selectedTableData && (
+      {selectedTable && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedTable(null)}>
-          <div className="bg-white rounded-2xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center">
-                  <span className="text-xl font-bold text-emerald-700">{selectedTableData.number}</span>
-                </div>
-                <div>
-                  <h2 className="text-lg font-bold text-slate-800">Table {selectedTableData.number}</h2>
-                  <p className="text-sm text-slate-500">{selectedTableData.zone} · {selectedTableData.seats} places</p>
-                </div>
+          <div className="bg-white rounded-2xl w-full max-w-sm" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-slate-200">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-slate-800">Table {selectedTable.number}</h2>
+                <button onClick={() => setSelectedTable(null)} className="p-2 hover:bg-slate-100 rounded-lg"><X size={20} /></button>
               </div>
-              <button onClick={() => setSelectedTable(null)} className="text-slate-400 hover:text-slate-600 text-xl">✕</button>
+              <p className="text-sm text-slate-500 mt-1">{selectedTable.seats} places · {getZoneLabel(selectedTable.zone)}</p>
             </div>
-
-            {/* Status */}
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-3">
-                <div className={`w-3 h-3 rounded-full ${getStatusDot(selectedTableData.status)}`} />
-                <span className="text-sm font-medium text-slate-700">{getStatusLabel(selectedTableData.status)}</span>
+            <div className="p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600">Statut actuel</span>
+                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
+                  selectedTable.status === 'available' ? 'bg-emerald-100 text-emerald-700' :
+                  selectedTable.status === 'occupied' ? 'bg-red-100 text-red-700' :
+                  selectedTable.status === 'reserved' ? 'bg-blue-100 text-blue-700' :
+                  'bg-amber-100 text-amber-700'
+                }`}>
+                  <div className={`w-2 h-2 rounded-full ${getStatusColor(selectedTable.status)}`} />
+                  {getStatusLabel(selectedTable.status)}
+                </span>
               </div>
-            </div>
-
-            {/* Current Order */}
-            {selectedTableData.currentOrder && (
-              <div className="bg-slate-50 rounded-xl p-4 mb-4">
-                <h4 className="font-medium text-slate-800 mb-3 flex items-center gap-2">
-                  <ChefHat size={16} className="text-emerald-600" />
-                  Commande en cours
-                </h4>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">Serveur</span>
-                    <span className="font-medium text-slate-700">{selectedTableData.currentOrder.server}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">Début</span>
-                    <span className="font-medium text-slate-700">
-                      {new Date(selectedTableData.currentOrder.startTime).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">Durée</span>
-                    <span className="font-medium text-slate-700 flex items-center gap-1">
-                      <Clock size={12} />
-                      {Math.round((Date.now() - new Date(selectedTableData.currentOrder.startTime).getTime()) / 60000)} min
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm pt-2 border-t border-slate-200">
-                    <span className="text-slate-500">Total</span>
-                    <span className="font-bold text-emerald-600">{selectedTableData.currentOrder.total.toFixed(2)} CHF</span>
-                  </div>
+              {selectedTable.customer && (
+                <div className="bg-slate-50 rounded-lg p-3">
+                  <p className="text-sm font-medium text-slate-800">{selectedTable.customer}</p>
+                  {selectedTable.orderTotal && <p className="text-sm text-slate-600 mt-1">Total: {selectedTable.orderTotal.toFixed(2)} CHF</p>}
+                  {selectedTable.since && <p className="text-xs text-slate-500 mt-1">Depuis {selectedTable.since}</p>}
                 </div>
+              )}
+              <div className="grid grid-cols-2 gap-2">
+                <button onClick={() => updateTableStatus(selectedTable.id, 'available')}
+                  className="px-3 py-2 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-medium hover:bg-emerald-200">
+                  Libérer
+                </button>
+                <button onClick={() => updateTableStatus(selectedTable.id, 'occupied')}
+                  className="px-3 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200">
+                  Occuper
+                </button>
+                <button onClick={() => updateTableStatus(selectedTable.id, 'reserved')}
+                  className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200">
+                  Réserver
+                </button>
+                <button onClick={() => updateTableStatus(selectedTable.id, 'cleaning')}
+                  className="px-3 py-2 bg-amber-100 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-200">
+                  Nettoyage
+                </button>
               </div>
-            )}
-
-            {/* Actions */}
-            <div className="grid grid-cols-2 gap-3">
-              {selectedTableData.status === 'available' && (
-                <button
-                  onClick={() => { updateTableStatus(selectedTableData.id, 'occupied'); setSelectedTable(null); }}
-                  className="col-span-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
-                >
-                  Asseoir des clients
-                </button>
-              )}
-              {selectedTableData.status === 'occupied' && (
-                <>
-                  <button
-                    onClick={() => { updateTableStatus(selectedTableData.id, 'bill-requested'); setSelectedTable(null); }}
-                    className="px-4 py-2.5 bg-amber-500 text-white rounded-lg text-sm font-medium hover:bg-amber-600"
-                  >
-                    Demander l'addition
-                  </button>
-                  <button
-                    onClick={() => { updateTableStatus(selectedTableData.id, 'available'); setSelectedTable(null); }}
-                    className="px-4 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700"
-                  >
-                    Libérer la table
-                  </button>
-                </>
-              )}
-              {selectedTableData.status === 'bill-requested' && (
-                <button
-                  onClick={() => { updateTableStatus(selectedTableData.id, 'available'); setSelectedTable(null); }}
-                  className="col-span-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700"
-                >
-                  Encaisser & Libérer
-                </button>
-              )}
-              {selectedTableData.status === 'reserved' && (
-                <>
-                  <button
-                    onClick={() => { updateTableStatus(selectedTableData.id, 'occupied'); setSelectedTable(null); }}
-                    className="px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
-                  >
-                    Confirmer arrivée
-                  </button>
-                  <button
-                    onClick={() => { updateTableStatus(selectedTableData.id, 'available'); setSelectedTable(null); }}
-                    className="px-4 py-2.5 bg-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-300"
-                  >
-                    Annuler réservation
-                  </button>
-                </>
-              )}
             </div>
           </div>
         </div>

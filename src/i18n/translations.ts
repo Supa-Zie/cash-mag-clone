@@ -14,6 +14,8 @@ export const translations = {
     employees: 'Employés',
     loyalty: 'Fidélité',
     tables: 'Tables',
+    promotions: 'Promotions',
+    suppliers: 'Fournisseurs',
     
     // Dashboard
     todaySales: "Ventes du jour",
@@ -147,6 +149,8 @@ export const translations = {
     employees: 'Employees',
     loyalty: 'Loyalty',
     tables: 'Tables',
+    promotions: 'Promotions',
+    suppliers: 'Suppliers',
     
     // Dashboard
     todaySales: "Today's Sales",
@@ -280,6 +284,8 @@ export const translations = {
     employees: 'Mitarbeiter',
     loyalty: 'Treueprogramm',
     tables: 'Tische',
+    promotions: 'Angebote',
+    suppliers: 'Lieferanten',
     
     // Dashboard
     todaySales: 'Heutige Verkäufe',

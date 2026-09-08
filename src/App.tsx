@@ -1,16 +1,33 @@
+import { lazy, Suspense } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import Sidebar from './components/Sidebar';
-import Dashboard from './pages/Dashboard';
-import PointOfSale from './pages/PointOfSale';
-import Products from './pages/Products';
-import Inventory from './pages/Inventory';
-import Transactions from './pages/Transactions';
-import CashRegister from './pages/CashRegister';
-import Reports from './pages/Reports';
-import Settings from './pages/Settings';
-import Employees from './pages/Employees';
-import Loyalty from './pages/Loyalty';
-import Tables from './pages/Tables';
+import { Loader2 } from 'lucide-react';
+
+// Lazy-loaded pages for code splitting
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const PointOfSale = lazy(() => import('./pages/PointOfSale'));
+const Products = lazy(() => import('./pages/Products'));
+const Inventory = lazy(() => import('./pages/Inventory'));
+const Transactions = lazy(() => import('./pages/Transactions'));
+const CashRegister = lazy(() => import('./pages/CashRegister'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Employees = lazy(() => import('./pages/Employees'));
+const Loyalty = lazy(() => import('./pages/Loyalty'));
+const Tables = lazy(() => import('./pages/Tables'));
+const Promotions = lazy(() => import('./pages/Promotions'));
+const Suppliers = lazy(() => import('./pages/Suppliers'));
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center h-full">
+      <div className="flex flex-col items-center gap-3">
+        <Loader2 size={32} className="text-emerald-600 animate-spin" />
+        <span className="text-sm text-slate-500">Chargement...</span>
+      </div>
+    </div>
+  );
+}
 
 function AppContent() {
   const { currentPage } = useApp();
@@ -26,6 +43,8 @@ function AppContent() {
       case 'employees': return <Employees />;
       case 'loyalty': return <Loyalty />;
       case 'tables': return <Tables />;
+      case 'promotions': return <Promotions />;
+      case 'suppliers': return <Suppliers />;
       case 'reports': return <Reports />;
       case 'settings': return <Settings />;
       default: return <Dashboard />;
@@ -33,10 +52,12 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-100 overflow-hidden">
+    <div className="flex h-screen bg-slate-100 dark:bg-slate-900 overflow-hidden transition-colors">
       <Sidebar />
       <main className="flex-1 overflow-y-auto">
-        {renderPage()}
+        <Suspense fallback={<PageLoader />}>
+          {renderPage()}
+        </Suspense>
       </main>
     </div>
   );

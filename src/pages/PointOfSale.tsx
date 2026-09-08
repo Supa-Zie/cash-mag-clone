@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { products, categories, CartItem } from '../data/mockData';
-import { Search, Plus, Minus, Trash2, ShoppingBag, CreditCard, Banknote, X, Check } from 'lucide-react';
+import { Search, Plus, Minus, Trash2, ShoppingBag, CreditCard, Banknote, X, Check, Printer } from 'lucide-react';
+import { printReceipt } from '../utils/receipt';
 
 export default function PointOfSale() {
   const { t, language } = useApp();
@@ -229,6 +230,45 @@ export default function PointOfSale() {
                 </div>
                 <h3 className="text-xl font-bold text-slate-800">✓ Paiement réussi!</h3>
                 <p className="text-slate-500 mt-2">{total.toFixed(2)} CHF</p>
+                <div className="flex gap-3 mt-6">
+                  <button
+                    onClick={() => {
+                      const receiptNo = `REC-${Date.now().toString().slice(-6)}`;
+                      const transaction = {
+                        id: Date.now().toString(),
+                        date: new Date().toISOString().split('T')[0],
+                        time: new Date().toLocaleTimeString('fr-CH', { hour: '2-digit', minute: '2-digit' }),
+                        items: cart.map(item => ({
+                          productId: item.product.id,
+                          name: item.product.name,
+                          quantity: item.quantity,
+                          price: item.product.price,
+                        })),
+                        subtotal,
+                        tax,
+                        total,
+                        paymentMethod,
+                        cashier: 'Marie L.',
+                        receiptNo,
+                      };
+                      printReceipt(transaction);
+                    }}
+                    className="flex-1 flex items-center justify-center gap-2 py-3 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition-all"
+                  >
+                    <Printer size={18} />
+                    Imprimer reçu
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPaymentComplete(false);
+                      setShowPayment(false);
+                      setCart([]);
+                    }}
+                    className="flex-1 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-all"
+                  >
+                    Nouvelle vente
+                  </button>
+                </div>
               </div>
             ) : (
               <>
