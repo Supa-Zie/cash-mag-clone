@@ -2,19 +2,25 @@ import { useApp } from '../context/AppContext';
 import { languageNames } from '../i18n/translations';
 import {
   LayoutDashboard, ShoppingCart, Package, Warehouse,
-  Receipt, Banknote, BarChart3, Settings, Globe, ChevronLeft, ChevronRight
+  Receipt, Banknote, BarChart3, Settings, Globe, ChevronLeft, ChevronRight,
+  Users, Award, UtensilsCrossed
 } from 'lucide-react';
 import { useState } from 'react';
 
-const navItems = [
-  { id: 'dashboard', icon: LayoutDashboard, key: 'dashboard' as const },
-  { id: 'pos', icon: ShoppingCart, key: 'pointOfSale' as const },
-  { id: 'products', icon: Package, key: 'products' as const },
-  { id: 'inventory', icon: Warehouse, key: 'inventory' as const },
-  { id: 'transactions', icon: Receipt, key: 'transactions' as const },
-  { id: 'cashregister', icon: Banknote, key: 'cashRegister' as const },
-  { id: 'reports', icon: BarChart3, key: 'reports' as const },
-  { id: 'settings', icon: Settings, key: 'settings' as const },
+type Page = 'dashboard' | 'pos' | 'products' | 'inventory' | 'transactions' | 'cash-register' | 'reports' | 'settings' | 'employees' | 'loyalty' | 'tables';
+
+const navItems: { id: Page; icon: typeof LayoutDashboard; key: string }[] = [
+  { id: 'dashboard', icon: LayoutDashboard, key: 'dashboard' },
+  { id: 'pos', icon: ShoppingCart, key: 'pointOfSale' },
+  { id: 'products', icon: Package, key: 'products' },
+  { id: 'inventory', icon: Warehouse, key: 'inventory' },
+  { id: 'transactions', icon: Receipt, key: 'transactions' },
+  { id: 'cash-register', icon: Banknote, key: 'cashRegister' },
+  { id: 'employees', icon: Users, key: 'employees' },
+  { id: 'loyalty', icon: Award, key: 'loyalty' },
+  { id: 'tables', icon: UtensilsCrossed, key: 'tables' },
+  { id: 'reports', icon: BarChart3, key: 'reports' },
+  { id: 'settings', icon: Settings, key: 'settings' },
 ];
 
 export default function Sidebar() {
@@ -60,7 +66,6 @@ export default function Sidebar() {
                   ? 'bg-emerald-600/20 text-emerald-400 border-r-3 border-emerald-400'
                   : 'text-slate-300 hover:bg-slate-800 hover:text-white'
               }`}
-              title={collapsed ? t(item.key) : undefined}
             >
               <Icon size={20} className="flex-shrink-0" />
               {!collapsed && <span>{t(item.key)}</span>}
@@ -70,49 +75,29 @@ export default function Sidebar() {
       </nav>
 
       {/* Language Switcher */}
-      <div className="p-4 border-t border-slate-700">
-        {!collapsed ? (
-          <div className="flex items-center gap-2">
-            <Globe size={16} className="text-slate-400 flex-shrink-0" />
-            <div className="flex gap-1 flex-1">
-              {languages.map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => setLanguage(lang)}
-                  className={`px-2 py-1 rounded text-xs font-medium transition-all ${
-                    language === lang
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  }`}
-                >
-                  {lang.toUpperCase()}
-                </button>
-              ))}
-            </div>
+      {!collapsed && (
+        <div className="p-4 border-t border-slate-700">
+          <div className="flex items-center gap-2 mb-2">
+            <Globe size={14} className="text-slate-400" />
+            <span className="text-xs text-slate-400 uppercase">Langue</span>
           </div>
-        ) : (
-          <div className="flex flex-col gap-1 items-center">
+          <div className="flex gap-1">
             {languages.map((lang) => (
               <button
                 key={lang}
                 onClick={() => setLanguage(lang)}
-                className={`px-1.5 py-0.5 rounded text-xs font-medium transition-all ${
+                className={`flex-1 px-2 py-1.5 text-xs font-medium rounded transition-colors ${
                   language === lang
                     ? 'bg-emerald-600 text-white'
-                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
                 }`}
               >
-                {lang.toUpperCase()}
+                {languageNames[lang]}
               </button>
             ))}
           </div>
-        )}
-        {!collapsed && (
-          <p className="text-xs text-slate-500 mt-2 text-center">
-            {languageNames[language]}
-          </p>
-        )}
-      </div>
+        </div>
+      )}
     </aside>
   );
 }

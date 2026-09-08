@@ -11,6 +11,9 @@ export const translations = {
     cashRegister: 'Caisse',
     reports: 'Rapports',
     settings: 'Paramètres',
+    employees: 'Employés',
+    loyalty: 'Fidélité',
+    tables: 'Tables',
     
     // Dashboard
     todaySales: "Ventes du jour",
@@ -141,6 +144,9 @@ export const translations = {
     cashRegister: 'Cash Register',
     reports: 'Reports',
     settings: 'Settings',
+    employees: 'Employees',
+    loyalty: 'Loyalty',
+    tables: 'Tables',
     
     // Dashboard
     todaySales: "Today's Sales",
@@ -271,6 +277,9 @@ export const translations = {
     cashRegister: 'Kassenregister',
     reports: 'Berichte',
     settings: 'Einstellungen',
+    employees: 'Mitarbeiter',
+    loyalty: 'Treueprogramm',
+    tables: 'Tische',
     
     // Dashboard
     todaySales: 'Heutige Verkäufe',
@@ -392,6 +401,8 @@ export const translations = {
     today: 'Heute',
   }
 };
+
+export type TranslationKeys = typeof translations.fr;
 
 export const languageNames: Record<Language, string> = {
   fr: 'Français',

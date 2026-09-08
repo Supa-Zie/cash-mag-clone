@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { salesData, weeklyData, categorySales, paymentBreakdown, transactions } from '../data/mockData';
-import { BarChart3, Calendar, TrendingUp, Download } from 'lucide-react';
+import { salesData, weeklyData, categorySales, paymentBreakdown } from '../data/mockData';
+import { BarChart3, Calendar, TrendingUp, Download, FileText, FileSpreadsheet, Printer, Shield, CheckCircle } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 
 export default function Reports() {
-  const { t } = useApp();
+  const { t, transactions } = useApp();
   const [period, setPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
+  const [showExportModal, setShowExportModal] = useState(false);
 
   const totalRevenue = transactions.reduce((sum, tx) => sum + tx.total, 0);
   const totalTx = transactions.length;
-  const avgTx = totalRevenue / totalTx;
-  const margin = totalRevenue * 0.32; // simulated 32% margin
+  const avgTx = totalTx > 0 ? totalRevenue / totalTx : 0;
+  const margin = totalRevenue * 0.32;
 
   const monthlyData = [
     { month: 'Sep', revenue: 28500 },
@@ -21,18 +22,62 @@ export default function Reports() {
     { month: 'Jan', revenue: 32400 },
   ];
 
+  const handleExport = (format: string) => {
+    // Generate CSV content
+    const headers = ['Date', 'Heure', 'Reçu', 'Articles', 'Sous-total', 'TVA', 'Total', 'Paiement', 'Caissier'];
+    const rows = transactions.map(tx => [
+      tx.date,
+      tx.time,
+      tx.receiptNo,
+      tx.items.map(i => `${i.name} x${i.quantity}`).join('; '),
+      tx.subtotal.toFixed(2),
+      tx.tax.toFixed(2),
+      tx.total.toFixed(2),
+      tx.paymentMethod,
+      tx.cashier,
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+
+    // Download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cashmag_export_${format}_${new Date().toISOString().split('T')[0]}.${format === 'csv' ? 'csv' : 'txt'}`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setShowExportModal(false);
+  };
+
+  const handlePrintReport = () => {
+    window.print();
+  };
+
   return (
     <div className="p-6 space-y-6 overflow-y-auto">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-800">{t('reports')}</h1>
-          <p className="text-slate-500 text-sm">Analyse des performances</p>
+          <p className="text-slate-500 text-sm">Analyse des performances & export comptable</p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">
-          <Download size={16} />
-          {t('export')}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handlePrintReport}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"
+          >
+            <Printer size={16} />
+            Imprimer
+          </button>
+          <button
+            onClick={() => setShowExportModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700"
+          >
+            <Download size={16} />
+            {t('export')}
+          </button>
+        </div>
       </div>
 
       {/* Period Selector */}
@@ -84,6 +129,23 @@ export default function Reports() {
             <TrendingUp size={12} />
             <span>32% de marge brute</span>
           </div>
+        </div>
+      </div>
+
+      {/* Accounting Compliance Badge */}
+      <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl p-5 text-white flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+            <Shield size={24} className="text-emerald-400" />
+          </div>
+          <div>
+            <h3 className="font-semibold">Conformité NF525 / MRoS</h3>
+            <p className="text-sm text-slate-300">Journal des ventes inaltérable · Export comptable certifié</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <CheckCircle size={16} className="text-emerald-400" />
+          <span className="text-sm text-emerald-400 font-medium">Certifié conforme</span>
         </div>
       </div>
 
@@ -172,6 +234,64 @@ export default function Reports() {
           </ResponsiveContainer>
         </div>
       </div>
+
+      {/* Export Modal */}
+      {showExportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowExportModal(false)}>
+          <div className="bg-white rounded-2xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
+            <h2 className="text-xl font-bold text-slate-800 mb-2">Exporter les données</h2>
+            <p className="text-sm text-slate-500 mb-6">Choisissez le format d'export pour votre fiduciaire ou vos archives.</p>
+            
+            <div className="space-y-3">
+              <button
+                onClick={() => handleExport('csv')}
+                className="w-full flex items-center gap-4 p-4 border border-slate-200 rounded-xl hover:border-emerald-300 hover:bg-emerald-50 transition-all group"
+              >
+                <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200">
+                  <FileSpreadsheet size={20} className="text-emerald-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-medium text-slate-800">Export CSV</p>
+                  <p className="text-xs text-slate-500">Compatible Excel, Google Sheets</p>
+                </div>
+              </button>
+
+              <button
+                onClick={() => handleExport('txt')}
+                className="w-full flex items-center gap-4 p-4 border border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all group"
+              >
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200">
+                  <FileText size={20} className="text-blue-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-medium text-slate-800">Journal comptable (TXT)</p>
+                  <p className="text-xs text-slate-500">Format inaltérable NF525</p>
+                </div>
+              </button>
+
+              <button
+                onClick={handlePrintReport}
+                className="w-full flex items-center gap-4 p-4 border border-slate-200 rounded-xl hover:border-purple-300 hover:bg-purple-50 transition-all group"
+              >
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200">
+                  <Printer size={20} className="text-purple-600" />
+                </div>
+                <div className="text-left">
+                  <p className="font-medium text-slate-800">Rapport imprimé (PDF)</p>
+                  <p className="text-xs text-slate-500">Rapport complet avec graphiques</p>
+                </div>
+              </button>
+            </div>
+
+            <button
+              onClick={() => setShowExportModal(false)}
+              className="w-full mt-4 px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

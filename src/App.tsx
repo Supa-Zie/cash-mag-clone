@@ -8,6 +8,9 @@ import Transactions from './pages/Transactions';
 import CashRegister from './pages/CashRegister';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import Employees from './pages/Employees';
+import Loyalty from './pages/Loyalty';
+import Tables from './pages/Tables';
 
 function AppContent() {
   const { currentPage } = useApp();
@@ -19,7 +22,10 @@ function AppContent() {
       case 'products': return <Products />;
       case 'inventory': return <Inventory />;
       case 'transactions': return <Transactions />;
-      case 'cashregister': return <CashRegister />;
+      case 'cash-register': return <CashRegister />;
+      case 'employees': return <Employees />;
+      case 'loyalty': return <Loyalty />;
+      case 'tables': return <Tables />;
       case 'reports': return <Reports />;
       case 'settings': return <Settings />;
       default: return <Dashboard />;
@@ -27,9 +33,9 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
+    <div className="flex h-screen bg-slate-100 overflow-hidden">
       <Sidebar />
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-y-auto">
         {renderPage()}
       </main>
     </div>
