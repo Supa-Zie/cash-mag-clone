@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { translations, Language } from '../i18n/translations';
 import { products as initialProducts, transactions as initialTransactions, Product, Transaction } from '../data/mockData';
 
-type Page = 'dashboard' | 'pos' | 'products' | 'inventory' | 'transactions' | 'cash-register' | 'reports' | 'settings' | 'employees' | 'loyalty' | 'tables' | 'promotions' | 'suppliers';
+type Page = 'dashboard' | 'pos' | 'products' | 'inventory' | 'transactions' | 'cash-register' | 'reports' | 'settings' | 'employees' | 'loyalty' | 'tables' | 'promotions' | 'suppliers' | 'shifts' | 'kitchen';
 
 export interface Notification {
   id: string;

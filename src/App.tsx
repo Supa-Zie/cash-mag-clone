@@ -17,6 +17,8 @@ const Loyalty = lazy(() => import('./pages/Loyalty'));
 const Tables = lazy(() => import('./pages/Tables'));
 const Promotions = lazy(() => import('./pages/Promotions'));
 const Suppliers = lazy(() => import('./pages/Suppliers'));
+const ShiftManagement = lazy(() => import('./pages/ShiftManagement'));
+const KitchenDisplay = lazy(() => import('./pages/KitchenDisplay'));
 
 function PageLoader() {
   return (
@@ -45,6 +47,8 @@ function AppContent() {
       case 'tables': return <Tables />;
       case 'promotions': return <Promotions />;
       case 'suppliers': return <Suppliers />;
+      case 'shifts': return <ShiftManagement />;
+      case 'kitchen': return <KitchenDisplay />;
       case 'reports': return <Reports />;
       case 'settings': return <Settings />;
       default: return <Dashboard />;

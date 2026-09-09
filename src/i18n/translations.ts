@@ -16,6 +16,8 @@ export const translations = {
     tables: 'Tables',
     promotions: 'Promotions',
     suppliers: 'Fournisseurs',
+    shifts: 'Shifts',
+    kitchen: 'Cuisine',
     
     // Dashboard
     todaySales: "Ventes du jour",
@@ -151,6 +153,8 @@ export const translations = {
     tables: 'Tables',
     promotions: 'Promotions',
     suppliers: 'Suppliers',
+    shifts: 'Shifts',
+    kitchen: 'Kitchen',
     
     // Dashboard
     todaySales: "Today's Sales",
@@ -286,6 +290,7 @@ export const translations = {
     tables: 'Tische',
     promotions: 'Angebote',
     suppliers: 'Lieferanten',
+    shifts: 'Schichten',
     
     // Dashboard
     todaySales: 'Heutige Verkäufe',

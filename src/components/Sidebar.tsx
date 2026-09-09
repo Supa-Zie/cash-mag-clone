@@ -4,11 +4,12 @@ import {
   LayoutDashboard, ShoppingCart, Package, Warehouse,
   Receipt, Banknote, BarChart3, Settings, Globe, ChevronLeft, ChevronRight,
   Users, Award, UtensilsCrossed, Tag, Truck, Bell, Moon, Sun, X, CheckCheck,
-  AlertTriangle, Info, CheckCircle, XCircle
+  AlertTriangle, Info, CheckCircle, XCircle, Wifi, WifiOff, RefreshCw, Clock, ChefHat
 } from 'lucide-react';
 import { useState } from 'react';
+import { useSync } from '../hooks/useSync';
 
-type Page = 'dashboard' | 'pos' | 'products' | 'inventory' | 'transactions' | 'cash-register' | 'reports' | 'settings' | 'employees' | 'loyalty' | 'tables' | 'promotions' | 'suppliers';
+type Page = 'dashboard' | 'pos' | 'products' | 'inventory' | 'transactions' | 'cash-register' | 'reports' | 'settings' | 'employees' | 'loyalty' | 'tables' | 'promotions' | 'suppliers' | 'shifts' | 'kitchen';
 
 const navItems: { id: Page; icon: typeof LayoutDashboard; key: string }[] = [
   { id: 'dashboard', icon: LayoutDashboard, key: 'dashboard' },
@@ -22,12 +23,15 @@ const navItems: { id: Page; icon: typeof LayoutDashboard; key: string }[] = [
   { id: 'tables', icon: UtensilsCrossed, key: 'tables' },
   { id: 'promotions', icon: Tag, key: 'promotions' },
   { id: 'suppliers', icon: Truck, key: 'suppliers' },
+  { id: 'shifts', icon: Clock, key: 'shifts' },
+  { id: 'kitchen', icon: ChefHat, key: 'kitchen' },
   { id: 'reports', icon: BarChart3, key: 'reports' },
   { id: 'settings', icon: Settings, key: 'settings' },
 ];
 
 export default function Sidebar() {
   const { t, currentPage, setCurrentPage, language, setLanguage, darkMode, toggleDarkMode, notifications, markAsRead, clearNotifications, unreadCount } = useApp();
+  const { syncStatus, sync } = useSync();
   const [collapsed, setCollapsed] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -113,6 +117,34 @@ export default function Sidebar() {
             >
               {darkMode ? <Sun size={18} className="text-amber-400" /> : <Moon size={18} className="text-slate-300" />}
             </button>
+          </div>
+
+          {/* Sync Status */}
+          <div className="px-4 pb-3">
+            <div className={`flex items-center justify-between px-3 py-2 rounded-lg ${
+              syncStatus.isOnline ? 'bg-emerald-900/30' : 'bg-red-900/30'
+            }`}>
+              <div className="flex items-center gap-2">
+                {syncStatus.isOnline ? (
+                  <Wifi size={14} className="text-emerald-400" />
+                ) : (
+                  <WifiOff size={14} className="text-red-400" />
+                )}
+                <span className="text-xs text-slate-300">
+                  {syncStatus.isOnline ? 'En ligne' : 'Hors ligne'}
+                </span>
+              </div>
+              {syncStatus.isOnline && (
+                <button
+                  onClick={sync}
+                  disabled={syncStatus.syncInProgress}
+                  className="p-1 hover:bg-slate-700 rounded transition-colors disabled:opacity-50"
+                  title="Synchroniser"
+                >
+                  <RefreshCw size={14} className={`text-slate-300 ${syncStatus.syncInProgress ? 'animate-spin' : ''}`} />
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Language Switcher */}
