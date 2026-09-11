@@ -20,7 +20,7 @@ export const translations = {
     kitchen: 'Cuisine',
     
     // Dashboard
-    todaySales: "Ventes du jour",
+    todaySales: 'Ventes du jour',
     weekSales: 'Ventes de la semaine',
     monthSales: 'Ventes du mois',
     avgTransaction: 'Panier moyen',
@@ -31,6 +31,8 @@ export const translations = {
     totalTransactions: 'Nombre de transactions',
     cashPayments: 'Paiements espèces',
     cardPayments: 'Paiements carte',
+    welcome: 'Bienvenue',
+    today: 'Aujourd\'hui',
     
     // POS
     searchProducts: 'Rechercher un produit...',
@@ -62,8 +64,6 @@ export const translations = {
     addProduct: 'Ajouter produit',
     editProduct: 'Modifier',
     deleteProduct: 'Supprimer',
-    save: 'Enregistrer',
-    cancel: 'Annuler',
     
     // Inventory
     stockLevel: 'Niveau de stock',
@@ -84,6 +84,7 @@ export const translations = {
     cashier: 'Caissier',
     filter: 'Filtrer',
     export: 'Exporter',
+    exportCSV: 'Exporter CSV',
     details: 'Détails',
     refund: 'Rembourser',
     
@@ -126,6 +127,8 @@ export const translations = {
     
     // Common
     search: 'Rechercher',
+    save: 'Enregistrer',
+    cancel: 'Annuler',
     confirm: 'Confirmer',
     delete: 'Supprimer',
     edit: 'Modifier',
@@ -135,8 +138,25 @@ export const translations = {
     next: 'Suivant',
     loading: 'Chargement...',
     noData: 'Aucune donnée',
-    welcome: 'Bienvenue',
-    today: "Aujourd'hui",
+    success: 'Succès',
+    error: 'Erreur',
+    warning: 'Attention',
+    info: 'Information',
+    yes: 'Oui',
+    no: 'Non',
+    ok: 'OK',
+    print: 'Imprimer',
+    download: 'Télécharger',
+    upload: 'Téléverser',
+    refresh: 'Actualiser',
+    sync: 'Synchroniser',
+    online: 'En ligne',
+    offline: 'Hors ligne',
+    notifications: 'Notifications',
+    markAllRead: 'Tout marquer comme lu',
+    noNotifications: 'Aucune notification',
+    darkMode: 'Mode sombre',
+    lightMode: 'Mode clair',
   },
   en: {
     // Navigation
@@ -157,7 +177,7 @@ export const translations = {
     kitchen: 'Kitchen',
     
     // Dashboard
-    todaySales: "Today's Sales",
+    todaySales: 'Today\'s Sales',
     weekSales: 'Weekly Sales',
     monthSales: 'Monthly Sales',
     avgTransaction: 'Average Transaction',
@@ -168,6 +188,8 @@ export const translations = {
     totalTransactions: 'Total Transactions',
     cashPayments: 'Cash Payments',
     cardPayments: 'Card Payments',
+    welcome: 'Welcome',
+    today: 'Today',
     
     // POS
     searchProducts: 'Search products...',
@@ -199,8 +221,6 @@ export const translations = {
     addProduct: 'Add Product',
     editProduct: 'Edit',
     deleteProduct: 'Delete',
-    save: 'Save',
-    cancel: 'Cancel',
     
     // Inventory
     stockLevel: 'Stock Level',
@@ -221,6 +241,7 @@ export const translations = {
     cashier: 'Cashier',
     filter: 'Filter',
     export: 'Export',
+    exportCSV: 'Export CSV',
     details: 'Details',
     refund: 'Refund',
     
@@ -263,6 +284,8 @@ export const translations = {
     
     // Common
     search: 'Search',
+    save: 'Save',
+    cancel: 'Cancel',
     confirm: 'Confirm',
     delete: 'Delete',
     edit: 'Edit',
@@ -272,8 +295,25 @@ export const translations = {
     next: 'Next',
     loading: 'Loading...',
     noData: 'No data',
-    welcome: 'Welcome',
-    today: 'Today',
+    success: 'Success',
+    error: 'Error',
+    warning: 'Warning',
+    info: 'Information',
+    yes: 'Yes',
+    no: 'No',
+    ok: 'OK',
+    print: 'Print',
+    download: 'Download',
+    upload: 'Upload',
+    refresh: 'Refresh',
+    sync: 'Sync',
+    online: 'Online',
+    offline: 'Offline',
+    notifications: 'Notifications',
+    markAllRead: 'Mark all as read',
+    noNotifications: 'No notifications',
+    darkMode: 'Dark mode',
+    lightMode: 'Light mode',
   },
   de: {
     // Navigation
@@ -291,6 +331,7 @@ export const translations = {
     promotions: 'Angebote',
     suppliers: 'Lieferanten',
     shifts: 'Schichten',
+    kitchen: 'Küche',
     
     // Dashboard
     todaySales: 'Heutige Verkäufe',
@@ -304,6 +345,8 @@ export const translations = {
     totalTransactions: 'Anzahl Transaktionen',
     cashPayments: 'Barzahlungen',
     cardPayments: 'Kartenzahlungen',
+    welcome: 'Willkommen',
+    today: 'Heute',
     
     // POS
     searchProducts: 'Produkte suchen...',
@@ -335,8 +378,6 @@ export const translations = {
     addProduct: 'Produkt hinzufügen',
     editProduct: 'Bearbeiten',
     deleteProduct: 'Löschen',
-    save: 'Speichern',
-    cancel: 'Abbrechen',
     
     // Inventory
     stockLevel: 'Lagerbestand',
@@ -357,6 +398,7 @@ export const translations = {
     cashier: 'Kassierer',
     filter: 'Filter',
     export: 'Exportieren',
+    exportCSV: 'CSV exportieren',
     details: 'Details',
     refund: 'Erstatten',
     
@@ -399,6 +441,8 @@ export const translations = {
     
     // Common
     search: 'Suchen',
+    save: 'Speichern',
+    cancel: 'Abbrechen',
     confirm: 'Bestätigen',
     delete: 'Löschen',
     edit: 'Bearbeiten',
@@ -408,12 +452,27 @@ export const translations = {
     next: 'Weiter',
     loading: 'Laden...',
     noData: 'Keine Daten',
-    welcome: 'Willkommen',
-    today: 'Heute',
+    success: 'Erfolg',
+    error: 'Fehler',
+    warning: 'Warnung',
+    info: 'Information',
+    yes: 'Ja',
+    no: 'Nein',
+    ok: 'OK',
+    print: 'Drucken',
+    download: 'Herunterladen',
+    upload: 'Hochladen',
+    refresh: 'Aktualisieren',
+    sync: 'Synchronisieren',
+    online: 'Online',
+    offline: 'Offline',
+    notifications: 'Benachrichtigungen',
+    markAllRead: 'Alle als gelesen markieren',
+    noNotifications: 'Keine Benachrichtigungen',
+    darkMode: 'Dunkelmodus',
+    lightMode: 'Hellmodus',
   }
 };
-
-export type TranslationKeys = typeof translations.fr;
 
 export const languageNames: Record<Language, string> = {
   fr: 'Français',

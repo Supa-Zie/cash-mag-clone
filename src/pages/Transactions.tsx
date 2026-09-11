@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { transactions } from '../data/mockData';
 import { Search, Download, Eye, CreditCard, Banknote, Split, Filter, Calendar } from 'lucide-react';
+import { exportTransactionsToCSV } from '../utils/csvExport';
 
 export default function Transactions() {
   const { t } = useApp();
@@ -37,16 +38,21 @@ export default function Transactions() {
   };
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">{t('transactions')}</h1>
-          <p className="text-slate-500 text-sm">{filteredTransactions.length} transactions · {totalAmount.toFixed(2)} CHF</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#906b33] dark:text-[#f4f1e9]">{t('transactions')}</h1>
+          <p className="text-sm text-[#a6885b] dark:text-[#b8a587] mt-1">
+            {filteredTransactions.length} transactions · {totalAmount.toFixed(2)} CHF
+          </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">
+        <button 
+          onClick={() => exportTransactionsToCSV(filteredTransactions)}
+          className="flex items-center gap-2 px-4 py-2 bg-[#906b33] text-[#f4f1e9] rounded-lg text-sm font-medium hover:bg-[#a6885b] transition-all shadow-md hover:shadow-lg"
+        >
           <Download size={16} />
-          {t('export')}
+          {t('exportCSV')}
         </button>
       </div>
 
