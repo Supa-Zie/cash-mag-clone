@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Coffee Shop Color Palette */
+:root {
+  /* Primary Colors */
+  --coffee-dark: #906b33;
+  --coffee-cream: #f4f1e9;
+  --coffee-gold: #e3b36c;
+  --coffee-light: #f6f5fa;
+  --coffee-medium: #a6885b;
+  --coffee-tan: #b8a587;
+  
+  /* Semantic Colors */
+  --bg-primary: #f6f5fa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f4f1e9;
+  --text-primary: #906b33;
+  --text-secondary: #a6885b;
+  --text-muted: #b8a587;
+  --accent: #e3b36c;
+  --border: #e3b36c33;
+  
+  /* Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+}
+
+.dark {
+  --bg-primary: #1a1410;
+  --bg-secondary: #2a2018;
+  --bg-tertiary: #3a2f25;
+  --text-primary: #f4f1e9;
+  --text-secondary: #e3b36c;
+  --text-muted: #b8a587;
+  --accent: #e3b36c;
+  --border: #e3b36c44;
+}
+
+/* Base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--coffee-medium);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--coffee-dark);
+}
+
+/* Animation utilities */
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.slide-in-from-right {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+.scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+/* Print styles for receipts */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-receipt, .print-receipt * {
+    visibility: visible;
+  }
+  .print-receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80mm;
+    padding: 5mm;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Receipt template */
+.receipt {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.receipt-header {
+  text-align: center;
+  border-bottom: 1px dashed var(--text-muted);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.receipt-items {
+  border-bottom: 1px dashed var(--text-muted);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.receipt-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.receipt-total {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.receipt-footer {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Dark mode transitions */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Focus styles */
+input:focus, select:focus, textarea:focus, button:focus-visible {
+  outline: none;
+  ring: 2px;
+  ring-color: var(--accent);
+}
+
+/* Table striping */
+tbody tr:nth-child(even) {
+  background-color: var(--bg-tertiary);
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .mobile-stack {
+    flex-direction: column;
+  }
+  
+  .mobile-full {
+    width: 100%;
+  }
+  
+  .mobile-hide {
+    display: none;
+  }
+}
+
+/* Coffee theme specific styles */
+.coffee-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(144, 107, 51, 0.08);
+}
+
+.coffee-button-primary {
+  background: var(--coffee-dark);
+  color: var(--coffee-cream);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.coffee-button-primary:hover {
+  background: var(--coffee-medium);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(144, 107, 51, 0.2);
+}
+
+.coffee-button-secondary {
+  background: transparent;
+  color: var(--coffee-dark);
+  border: 2px solid var(--coffee-dark);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.coffee-button-secondary:hover {
+  background: var(--coffee-dark);
+  color: var(--coffee-cream);
+}
+
+.coffee-input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.coffee-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(227, 179, 108, 0.1);
+}
