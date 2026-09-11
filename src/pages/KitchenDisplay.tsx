@@ -156,7 +156,7 @@ export default function KitchenDisplay() {
   const readyCount = orders.filter(o => o.status === 'ready').length;
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="p-6 space-y-6 overflow-y-auto min-h-screen" style={{ backgroundColor: '#f6f5fa' }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">

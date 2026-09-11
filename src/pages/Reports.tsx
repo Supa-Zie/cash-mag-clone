@@ -55,7 +55,7 @@ export default function Reports() {
   };
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto">
+    <div className="p-6 space-y-6 overflow-y-auto" style={{ backgroundColor: '#f6f5fa' }}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

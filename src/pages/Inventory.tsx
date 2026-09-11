@@ -41,7 +41,7 @@ export default function Inventory() {
   const inStockCount = products.filter(p => getStockStatus(p) === 'ok').length;
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto">
+    <div className="p-6 space-y-6 overflow-y-auto" style={{ backgroundColor: '#f6f5fa' }}>
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-800">{t('inventory')}</h1>

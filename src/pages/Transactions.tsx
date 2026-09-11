@@ -38,7 +38,7 @@ export default function Transactions() {
   };
 
   return (
-    <div className="p-4 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6 overflow-y-auto h-full" style={{ backgroundColor: '#f6f5fa' }}>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>

@@ -77,7 +77,7 @@ export default function PointOfSale() {
   };
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full" style={{ backgroundColor: '#f6f5fa' }}>
       {/* Products Grid */}
       <div className="flex-1 flex flex-col p-4 overflow-hidden">
         {/* Search & Categories */}

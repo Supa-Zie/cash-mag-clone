@@ -56,7 +56,7 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-100 dark:bg-slate-900 overflow-hidden transition-colors">
+    <div className="flex h-screen overflow-hidden transition-colors" style={{ backgroundColor: '#f6f5fa' }}>
       <Sidebar />
       <main className="flex-1 overflow-y-auto">
         <Suspense fallback={<PageLoader />}>
