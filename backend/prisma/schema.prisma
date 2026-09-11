@@ -1,0 +1,348 @@
+// Prisma Schema with Row-Level Security (RLS)
+// This schema implements multi-tenant architecture with proper access control
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum UserRole {
+  OWNER
+  MANAGER
+  CASHIER
+  INVENTORY
+  VIEWER
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  TWINT
+  POSTFINANCE
+  SPLIT
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum OrderType {
+  SALE
+  REFUND
+  VOID
+}
+
+// ============================================
+// MODELS
+// ============================================
+
+model User {
+  id            String     @id @default(uuid())
+  email         String     @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  role          UserRole
+  storeId       String
+  isActive      Boolean    @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relations
+  store         Store      @relation(fields: [storeId], references: [id])
+  transactions  Transaction[]
+  auditLogs     AuditLog[]
+
+  @@index([storeId])
+  @@index([email])
+}
+
+model Store {
+  id            String     @id @default(uuid())
+  name          String
+  address       String
+  city          String
+  postalCode    String
+  country       String     @default("CH")
+  phone         String?
+  email         String?
+  taxNumber     String?    // TVA number
+  currency      String     @default("CHF")
+  timezone      String     @default("Europe/Zurich")
+  isActive      Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relations
+  users         User[]
+  products      Product[]
+  transactions  Transaction[]
+  cashRegisters CashRegister[]
+
+  @@index([country])
+}
+
+model Product {
+  id            String     @id @default(uuid())
+  storeId       String
+  sku           String
+  name          String
+  description   String?
+  category      String?
+  price         Decimal    @db.Decimal(10, 2)
+  cost          Decimal    @db.Decimal(10, 2)
+  stock         Int        @default(0)
+  minStock      Int        @default(5)
+  barcode       String?    @unique
+  taxRate       Decimal    @default(7.7) @db.Decimal(5, 2) // Swiss VAT default
+  isActive      Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relations
+  store         Store      @relation(fields: [storeId], references: [id])
+  transactionItems TransactionItem[]
+
+  @@index([storeId])
+  @@index([sku])
+  @@index([barcode])
+  @@index([category])
+}
+
+model CashRegister {
+  id            String     @id @default(uuid())
+  storeId       String
+  name          String
+  location      String?
+  isOpen        Boolean    @default(false)
+  openingAmount Decimal    @default(0) @db.Decimal(10, 2)
+  currentAmount Decimal    @default(0) @db.Decimal(10, 2)
+  lastOpenedAt  DateTime?
+  lastClosedAt  DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  // Relations
+  store         Store      @relation(fields: [storeId], references: [id])
+  transactions  Transaction[]
+
+  @@index([storeId])
+}
+
+model Transaction {
+  id              String           @id @default(uuid())
+  storeId         String
+  cashRegisterId  String
+  userId          String
+  orderType       OrderType        @default(SALE)
+  status          TransactionStatus @default(PENDING)
+  subtotal        Decimal          @db.Decimal(10, 2)
+  taxAmount       Decimal          @db.Decimal(10, 2)
+  discount        Decimal          @default(0) @db.Decimal(10, 2)
+  total           Decimal          @db.Decimal(10, 2)
+  customerName    String?
+  customerEmail   String?
+  notes           String?
+  metadata        Json?            // Additional data (loyalty points, etc.)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relations
+  store           Store            @relation(fields: [storeId], references: [id])
+  cashRegister    CashRegister     @relation(fields: [cashRegisterId], references: [id])
+  user            User             @relation(fields: [userId], references: [id])
+  items           TransactionItem[]
+  payments        Payment[]
+
+  @@index([storeId])
+  @@index([userId])
+  @@index([cashRegisterId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model TransactionItem {
+  id              String     @id @default(uuid())
+  transactionId   String
+  productId       String
+  quantity        Int
+  unitPrice       Decimal    @db.Decimal(10, 2)
+  discount        Decimal    @default(0) @db.Decimal(10, 2)
+  taxRate         Decimal    @db.Decimal(5, 2)
+  taxAmount       Decimal    @db.Decimal(10, 2)
+  total           Decimal    @db.Decimal(10, 2)
+  createdAt       DateTime   @default(now())
+
+  // Relations
+  transaction     Transaction @relation(fields: [transactionId], references: [id])
+  product         Product     @relation(fields: [productId], references: [id])
+
+  @@index([transactionId])
+  @@index([productId])
+}
+
+model Payment {
+  id              String         @id @default(uuid())
+  transactionId   String
+  method          PaymentMethod
+  status          PaymentStatus  @default(PENDING)
+  amount          Decimal        @db.Decimal(10, 2)
+  currency        String         @default("CHF")
+  idempotencyKey  String         @unique // Critical for preventing duplicate payments
+  externalRef     String?        // External payment gateway reference
+  processor       String?        // Payment processor name
+  processorFee    Decimal?       @db.Decimal(10, 2)
+  metadata        Json?
+  processedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  transaction     Transaction    @relation(fields: [transactionId], references: [id])
+
+  @@index([transactionId])
+  @@index([idempotencyKey])
+  @@index([status])
+  @@index([externalRef])
+}
+
+model AuditLog {
+  id              String     @id @default(uuid())
+  userId          String?
+  action          String     // CREATE, UPDATE, DELETE, LOGIN, etc.
+  entity          String     // User, Product, Transaction, etc.
+  entityId        String?
+  oldValue        Json?
+  newValue        Json?
+  ipAddress       String?
+  userAgent       String?
+  createdAt       DateTime   @default(now())
+
+  // Relations
+  user            User?      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([entity])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model IdempotencyKey {
+  id              String     @id @default(uuid())
+  key             String     @unique
+  endpoint        String
+  userId          String
+  requestHash     String     // Hash of request body for validation
+  responseStatus  Int?
+  responseBody    Json?
+  expiresAt       DateTime
+  createdAt       DateTime   @default(now())
+
+  @@index([key])
+  @@index([expiresAt])
+}
+
+// ============================================
+// ROW-LEVEL SECURITY (RLS) POLICIES
+// ============================================
+
+// Enable RLS on all tables
+// These policies ensure users can only access data from their own store
+
+/*
+-- Enable RLS
+ALTER TABLE "User" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Store" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Product" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Transaction" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "Payment" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "AuditLog" ENABLE ROW LEVEL SECURITY;
+
+-- User policies
+CREATE POLICY "Users can view users in their store"
+  ON "User" FOR SELECT
+  USING (storeId = current_setting('app.current_store_id')::uuid);
+
+CREATE POLICY "Managers can create users in their store"
+  ON "User" FOR INSERT
+  WITH CHECK (
+    storeId = current_setting('app.current_store_id')::uuid
+    AND current_setting('app.current_user_role') IN ('OWNER', 'MANAGER')
+  );
+
+CREATE POLICY "Managers can update users in their store"
+  ON "User" FOR UPDATE
+  USING (storeId = current_setting('app.current_store_id')::uuid)
+  WITH CHECK (
+    current_setting('app.current_user_role') IN ('OWNER', 'MANAGER')
+  );
+
+-- Store policies
+CREATE POLICY "Users can view their own store"
+  ON "Store" FOR SELECT
+  USING (id = current_setting('app.current_store_id')::uuid);
+
+-- Product policies
+CREATE POLICY "Users can view products in their store"
+  ON "Product" FOR SELECT
+  USING (storeId = current_setting('app.current_store_id')::uuid);
+
+CREATE POLICY "Managers can manage products in their store"
+  ON "Product" FOR ALL
+  USING (
+    storeId = current_setting('app.current_store_id')::uuid
+    AND current_setting('app.current_user_role') IN ('OWNER', 'MANAGER', 'INVENTORY')
+  );
+
+-- Transaction policies
+CREATE POLICY "Users can view transactions in their store"
+  ON "Transaction" FOR SELECT
+  USING (storeId = current_setting('app.current_store_id')::uuid);
+
+CREATE POLICY "Cashiers can create transactions in their store"
+  ON "Transaction" FOR INSERT
+  WITH CHECK (
+    storeId = current_setting('app.current_store_id')::uuid
+    AND current_setting('app.current_user_role') IN ('OWNER', 'MANAGER', 'CASHIER')
+  );
+
+-- Payment policies
+CREATE POLICY "Users can view payments in their store"
+  ON "Payment" FOR SELECT
+  USING (
+    transactionId IN (
+      SELECT id FROM "Transaction"
+      WHERE "storeId" = current_setting('app.current_store_id')::uuid
+    )
+  );
+
+-- Audit log policies
+CREATE POLICY "Users can view audit logs for their store"
+  ON "AuditLog" FOR SELECT
+  USING (
+    userId IN (
+      SELECT id FROM "User"
+      WHERE "storeId" = current_setting('app.current_store_id')::uuid
+    )
+  );
+*/
