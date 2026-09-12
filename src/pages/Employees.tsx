@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Users, Plus, Edit2, Trash2, Clock, DollarSign, Award, X, Mail, Phone, Shield, UserCheck } from 'lucide-react';
+import { Users, Plus, Edit2, Trash2, Clock, DollarSign, Award, X, Mail, Phone } from 'lucide-react';
 
 interface Employee {
   id: string;
@@ -64,11 +64,11 @@ export default function Employees() {
 
   const getRoleBadge = (role: string) => {
     switch (role) {
-      case 'manager': return 'bg-purple-100 text-purple-700';
-      case 'cashier': return 'bg-blue-100 text-blue-700';
-      case 'stock': return 'bg-amber-100 text-amber-700';
-      case 'admin': return 'bg-emerald-100 text-emerald-700';
-      default: return 'bg-slate-100 text-slate-500';
+      case 'manager': return 'bg-[#F5EBE1] text-[#A87B43] dark:bg-[#33271D] dark:text-[#E3B36C]';
+      case 'cashier': return 'bg-[#EAF2FD] text-[#2563EB] dark:bg-[#1E293B] dark:text-[#60A5FA]';
+      case 'stock': return 'bg-[#FEF3E7] text-[#B45309] dark:bg-[#3D2616] dark:text-[#F59E0B]';
+      case 'admin': return 'bg-[#1A1816] text-white dark:bg-[#F8F6F0] dark:text-[#1A1816]';
+      default: return 'bg-[#F0EAE1] text-[#6B635B] dark:bg-[#2C2620] dark:text-[#A89F95]';
     }
   };
 
@@ -76,7 +76,7 @@ export default function Employees() {
     switch (role) {
       case 'manager': return 'Manager';
       case 'cashier': return 'Caissier(ère)';
-      case 'stock': return 'Stock';
+      case 'stock': return 'Stockiste';
       case 'admin': return 'Admin';
       default: return role;
     }
@@ -113,42 +113,78 @@ export default function Employees() {
   const handleDelete = (id: string) => setEmployees(employees.filter(e => e.id !== id));
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto" style={{ backgroundColor: '#f6f5fa' }}>
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1600px] mx-auto min-h-full bg-[#F8F6F0] dark:bg-[#181512] text-[#1A1816] dark:text-[#F8F6F0]">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">{t('employees')}</h1>
-          <p className="text-slate-500 text-sm">Gestion des employés, rôles et commissions</p>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl sm:text-3xl font-black text-[#A87B43] dark:text-[#E3B36C] tracking-tight">
+              CashMag
+            </span>
+            <span className="text-2xl sm:text-3xl font-bold text-[#1A1816] dark:text-[#F8F6F0]">
+              {t('employees')}
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-[#6B635B] dark:text-[#A89F95] mt-1">
+            Gestion du personnel, des stations d'encaissement et des commissions
+          </p>
         </div>
-        <button onClick={() => { setEditingEmployee(null); setFormData({ name: '', role: 'cashier', email: '', phone: '', commission: 1.5 }); setShowModal(true); }}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
-          <Plus size={16} /> Nouvel employé
+        <button 
+          onClick={() => { setEditingEmployee(null); setFormData({ name: '', role: 'cashier', email: '', phone: '', commission: 1.5 }); setShowModal(true); }}
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#A87B43] hover:bg-[#906B33] text-white rounded-full font-bold text-xs sm:text-sm transition-all shadow-xs active:scale-95 self-start sm:self-auto"
+        >
+          <Plus size={16} />
+          <span>Nouvel employé</span>
         </button>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4.5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center"><Users size={20} className="text-emerald-600" /></div>
-            <div><p className="text-2xl font-bold text-slate-800">{activeCount}</p><p className="text-xs text-slate-500">Actifs</p></div>
+            <div className="w-10 h-10 bg-[#EAF7ED] dark:bg-[#1A3320] text-[#1E7E34] dark:text-[#4ADE80] rounded-xl flex items-center justify-center">
+              <Users size={20} />
+            </div>
+            <div>
+              <p className="text-2xl font-extrabold text-[#1A1816] dark:text-[#F8F6F0]">{activeCount}</p>
+              <p className="text-xs font-semibold text-[#6B635B] dark:text-[#A89F95]">Employés actifs</p>
+            </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4.5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center"><DollarSign size={20} className="text-blue-600" /></div>
-            <div><p className="text-2xl font-bold text-slate-800">{totalSales.toLocaleString()} CHF</p><p className="text-xs text-slate-500">Ventes totales</p></div>
+            <div className="w-10 h-10 bg-[#F5EBE1] dark:bg-[#33271D] text-[#A87B43] dark:text-[#E3B36C] rounded-xl flex items-center justify-center">
+              <DollarSign size={20} />
+            </div>
+            <div>
+              <p className="text-2xl font-extrabold text-[#1A1816] dark:text-[#F8F6F0]">{totalSales.toLocaleString()} <span className="text-xs text-[#A87B43]">CHF</span></p>
+              <p className="text-xs font-semibold text-[#6B635B] dark:text-[#A89F95]">Ventes totales</p>
+            </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4.5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center"><Award size={20} className="text-purple-600" /></div>
-            <div><p className="text-2xl font-bold text-slate-800">{totalTx}</p><p className="text-xs text-slate-500">Transactions</p></div>
+            <div className="w-10 h-10 bg-[#F8F6F0] dark:bg-[#2A241E] text-[#C59E58] rounded-xl flex items-center justify-center border border-[#EFECE6]/60 dark:border-[#342D26]">
+              <Award size={20} />
+            </div>
+            <div>
+              <p className="text-2xl font-extrabold text-[#1A1816] dark:text-[#F8F6F0]">{totalTx}</p>
+              <p className="text-xs font-semibold text-[#6B635B] dark:text-[#A89F95]">Transactions</p>
+            </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4.5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center"><Clock size={20} className="text-amber-600" /></div>
-            <div><p className="text-2xl font-bold text-slate-800">{(totalSales / (totalTx || 1)).toFixed(0)} CHF</p><p className="text-xs text-slate-500">Panier moyen</p></div>
+            <div className="w-10 h-10 bg-[#FAF8F3] dark:bg-[#2A241E] text-[#A87B43] rounded-xl flex items-center justify-center border border-[#EFECE6]/60 dark:border-[#342D26]">
+              <Clock size={20} />
+            </div>
+            <div>
+              <p className="text-2xl font-extrabold text-[#1A1816] dark:text-[#F8F6F0]">{(totalSales / (totalTx || 1)).toFixed(0)} <span className="text-xs text-[#A87B43]">CHF</span></p>
+              <p className="text-xs font-semibold text-[#6B635B] dark:text-[#A89F95]">Panier moyen</p>
+            </div>
           </div>
         </div>
       </div>
@@ -156,40 +192,44 @@ export default function Employees() {
       {/* Employee Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {employees.map((emp) => (
-          <div key={emp.id} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow">
+          <div key={emp.id} className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl border border-[#EFECE6] dark:border-[#342D26] p-5 hover:border-[#A87B43] transition-all shadow-xs">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm ${
-                  emp.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
-                }`}>{emp.avatar}</div>
+                <div className="w-11 h-11 rounded-full bg-[#F0EAE1] dark:bg-[#2E2720] text-[#A87B43] font-bold text-sm flex items-center justify-center flex-shrink-0 shadow-2xs">
+                  {emp.avatar}
+                </div>
                 <div>
-                  <h3 className="font-semibold text-slate-800">{emp.name}</h3>
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getRoleBadge(emp.role)}`}>
+                  <h3 className="font-bold text-sm sm:text-base text-[#1A1816] dark:text-[#F8F6F0]">{emp.name}</h3>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold mt-0.5 ${getRoleBadge(emp.role)}`}>
                     {getRoleLabel(emp.role)}
                   </span>
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                <button onClick={() => handleEdit(emp)} className="p-1.5 hover:bg-slate-100 rounded-lg"><Edit2 size={14} className="text-slate-400" /></button>
-                <button onClick={() => handleDelete(emp.id)} className="p-1.5 hover:bg-red-50 rounded-lg"><Trash2 size={14} className="text-red-400" /></button>
+                <button onClick={() => handleEdit(emp)} className="p-1.5 hover:bg-[#F0EAE1] dark:hover:bg-[#2C2620] text-[#9C9388] hover:text-[#A87B43] rounded-lg transition-colors">
+                  <Edit2 size={14} />
+                </button>
+                <button onClick={() => handleDelete(emp.id)} className="p-1.5 hover:bg-[#FEECEC] dark:hover:bg-[#381B1B] text-[#9C9388] hover:text-[#DC2626] rounded-lg transition-colors">
+                  <Trash2 size={14} />
+                </button>
               </div>
             </div>
-            <div className="space-y-2 mb-4">
-              <div className="flex items-center gap-2 text-sm text-slate-600"><Mail size={12} className="text-slate-400" /><span>{emp.email}</span></div>
-              <div className="flex items-center gap-2 text-sm text-slate-600"><Phone size={12} className="text-slate-400" /><span>{emp.phone}</span></div>
+            <div className="space-y-1.5 mb-4 text-xs text-[#6B635B] dark:text-[#A89F95]">
+              <div className="flex items-center gap-2"><Mail size={13} className="text-[#9C9388]" /><span>{emp.email}</span></div>
+              <div className="flex items-center gap-2"><Phone size={13} className="text-[#9C9388]" /><span>{emp.phone}</span></div>
             </div>
-            <div className="grid grid-cols-3 gap-2 pt-3 border-t border-slate-100">
+            <div className="grid grid-cols-3 gap-2 pt-3 border-t border-[#EFECE6] dark:border-[#342D26]">
               <div className="text-center">
-                <p className="text-sm font-bold text-slate-800">{emp.totalSales > 0 ? `${(emp.totalSales / 1000).toFixed(1)}k` : '-'}</p>
-                <p className="text-xs text-slate-500">CHF</p>
+                <p className="text-xs sm:text-sm font-bold text-[#1A1816] dark:text-[#F8F6F0]">{emp.totalSales > 0 ? `${(emp.totalSales / 1000).toFixed(1)}k` : '-'}</p>
+                <p className="text-[10px] text-[#9C9388]">CHF</p>
               </div>
               <div className="text-center">
-                <p className="text-sm font-bold text-slate-800">{emp.transactions || '-'}</p>
-                <p className="text-xs text-slate-500">Tx</p>
+                <p className="text-xs sm:text-sm font-bold text-[#1A1816] dark:text-[#F8F6F0]">{emp.transactions || '-'}</p>
+                <p className="text-[10px] text-[#9C9388]">Tx</p>
               </div>
               <div className="text-center">
-                <p className="text-sm font-bold text-slate-800">{emp.commission}%</p>
-                <p className="text-xs text-slate-500">Comm.</p>
+                <p className="text-xs sm:text-sm font-bold text-[#A87B43]">{emp.commission}%</p>
+                <p className="text-[10px] text-[#9C9388]">Comm.</p>
               </div>
             </div>
           </div>
@@ -198,49 +238,51 @@ export default function Employees() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
-          <div className="bg-white rounded-2xl w-full max-w-md" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-slate-800">{editingEmployee ? 'Modifier' : 'Nouvel employé'}</h2>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-slate-100 rounded-lg"><X size={20} /></button>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-in" onClick={() => setShowModal(false)}>
+          <div className="bg-white dark:bg-[#221E1A] rounded-2xl w-full max-w-md border border-[#EFECE6] dark:border-[#342D26] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="p-5 border-b border-[#EFECE6] dark:border-[#342D26] flex items-center justify-between">
+              <h2 className="text-base font-bold text-[#1A1816] dark:text-[#F8F6F0]">{editingEmployee ? 'Modifier l\'employé' : 'Nouvel employé'}</h2>
+              <button onClick={() => setShowModal(false)} className="p-1.5 text-[#9C9388] hover:text-[#1A1816] dark:hover:text-[#F8F6F0] rounded-lg"><X size={18} /></button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-5 space-y-4 text-xs">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Nom complet</label>
+                <label className="block font-bold text-[#6B635B] dark:text-[#A89F95] mb-1">Nom complet</label>
                 <input type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                  className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Rôle</label>
+                <label className="block font-bold text-[#6B635B] dark:text-[#A89F95] mb-1">Rôle</label>
                 <select value={formData.role} onChange={e => setFormData({ ...formData, role: e.target.value as Employee['role'] })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none">
+                  className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]">
                   <option value="cashier">Caissier(ère)</option>
                   <option value="manager">Manager</option>
-                  <option value="stock">Stock</option>
+                  <option value="stock">Stockiste</option>
                   <option value="admin">Admin</option>
                 </select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                  <label className="block font-bold text-[#6B635B] dark:text-[#A89F95] mb-1">Email</label>
                   <input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Téléphone</label>
+                  <label className="block font-bold text-[#6B635B] dark:text-[#A89F95] mb-1">Téléphone</label>
                   <input type="tel" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                    className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]" />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Commission (%)</label>
+                <label className="block font-bold text-[#6B635B] dark:text-[#A89F95] mb-1">Commission (%)</label>
                 <input type="number" step="0.1" value={formData.commission} onChange={e => setFormData({ ...formData, commission: parseFloat(e.target.value) || 0 })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none" />
+                  className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]" />
               </div>
             </div>
-            <div className="p-6 border-t border-slate-200 flex justify-end gap-3">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">Annuler</button>
-              <button onClick={handleSave} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
+            <div className="p-5 border-t border-[#EFECE6] dark:border-[#342D26] flex justify-end gap-2.5">
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs font-semibold text-[#6B635B] dark:text-[#A89F95] hover:bg-[#F0EAE1] dark:hover:bg-[#2C2620] transition-colors">
+                Annuler
+              </button>
+              <button onClick={handleSave} className="px-5 py-2 bg-[#A87B43] hover:bg-[#906B33] text-white rounded-xl text-xs font-bold transition-colors shadow-xs">
                 {editingEmployee ? 'Mettre à jour' : 'Ajouter'}
               </button>
             </div>

@@ -24,8 +24,8 @@ function PageLoader() {
   return (
     <div className="flex items-center justify-center h-full">
       <div className="flex flex-col items-center gap-3">
-        <Loader2 size={32} className="text-emerald-600 animate-spin" />
-        <span className="text-sm text-slate-500">Chargement...</span>
+        <Loader2 size={32} className="text-[#A87B43] animate-spin" />
+        <span className="text-sm text-[#6B635B] dark:text-[#A89F95]">Chargement...</span>
       </div>
     </div>
   );
@@ -56,7 +56,7 @@ function AppContent() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden transition-colors" style={{ backgroundColor: '#f6f5fa' }}>
+    <div className="flex h-screen overflow-hidden transition-colors bg-[#F8F6F0] dark:bg-[#181512] text-[#1A1816] dark:text-[#F8F6F0]">
       <Sidebar />
       <main className="flex-1 overflow-y-auto">
         <Suspense fallback={<PageLoader />}>

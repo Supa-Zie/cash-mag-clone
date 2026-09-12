@@ -1,6 +1,6 @@
 import { useApp } from '../context/AppContext';
 import { languageNames } from '../i18n/translations';
-import { Store, Globe, CreditCard, Receipt, Save, Shield } from 'lucide-react';
+import { Store, CreditCard, Receipt, Save, Shield } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Settings() {
@@ -13,94 +13,96 @@ export default function Settings() {
   };
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto max-w-4xl" style={{ backgroundColor: '#f6f5fa' }}>
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto max-w-4xl bg-[#F8F6F0] dark:bg-[#181512] min-h-screen text-[#1A1816] dark:text-[#F8F6F0]">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">{t('settings')}</h1>
-          <p className="text-slate-500 text-sm">Configuration du système</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[#1A1816] dark:text-[#F8F6F0]">{t('settings')}</h1>
+          <p className="text-[#6B635B] dark:text-[#A89F95] text-sm mt-0.5">Configuration du système</p>
         </div>
         <button
           onClick={handleSave}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-            saved ? 'bg-emerald-100 text-emerald-700' : 'bg-emerald-600 text-white hover:bg-emerald-700'
+          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-xs transition-all self-start sm:self-auto ${
+            saved 
+              ? 'bg-[#FAF4ED] text-[#A87B43] border border-[#E8DEC8] dark:bg-[#2D241C] dark:text-[#C59E58]' 
+              : 'bg-[#A87B43] hover:bg-[#906B33] text-white'
           }`}
         >
-          <Save size={16} />
+          <Save size={15} />
           {saved ? '✓ Sauvegardé' : t('save')}
         </button>
       </div>
 
       {/* Store Information */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
+      <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl border border-[#EFECE6] dark:border-[#342D26] p-6 shadow-xs">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-            <Store size={20} className="text-blue-600" />
+          <div className="w-10 h-10 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] border border-[#EFECE6] dark:border-[#342D26] rounded-xl flex items-center justify-center">
+            <Store size={20} />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-800">{t('storeInfo')}</h3>
-            <p className="text-sm text-slate-500">Informations générales du commerce</p>
+            <h3 className="font-bold text-base text-[#1A1816] dark:text-[#F8F6F0]">{t('storeInfo')}</h3>
+            <p className="text-xs text-[#6B635B] dark:text-[#A89F95]">Informations générales du commerce</p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">{t('storeName')}</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('storeName')}</label>
             <input
               type="text"
               defaultValue="CashMag Genève Centre"
-              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">{t('address')}</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('address')}</label>
             <input
               type="text"
               defaultValue="Rue du Mont-Blanc 15, 1201 Genève"
-              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">{t('phone')}</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('phone')}</label>
             <input
               type="text"
               defaultValue="+41 22 700 77 07"
-              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">{t('email')}</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('email')}</label>
             <input
               type="email"
               defaultValue="geneve@cashmag.ch"
-              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
             />
           </div>
         </div>
       </div>
 
       {/* General Settings */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
+      <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl border border-[#EFECE6] dark:border-[#342D26] p-6 shadow-xs">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-            <Shield size={20} className="text-emerald-600" />
+          <div className="w-10 h-10 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] border border-[#EFECE6] dark:border-[#342D26] rounded-xl flex items-center justify-center">
+            <Shield size={20} />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-800">{t('general')}</h3>
-            <p className="text-sm text-slate-500">Configuration générale du système</p>
+            <h3 className="font-bold text-base text-[#1A1816] dark:text-[#F8F6F0]">{t('general')}</h3>
+            <p className="text-xs text-[#6B635B] dark:text-[#A89F95]">Configuration générale du système</p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">{t('language')}</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('language')}</label>
             <div className="flex gap-2">
               {(['fr', 'en', 'de'] as const).map((lang) => (
                 <button
                   key={lang}
                   onClick={() => setLanguage(lang)}
-                  className={`flex-1 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  className={`flex-1 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                     language === lang
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-[#A87B43] text-white shadow-xs'
+                      : 'bg-[#F0EAE1] dark:bg-[#2D241C] text-[#6B635B] dark:text-[#A89F95] hover:text-[#1A1816]'
                   }`}
                 >
                   {languageNames[lang]}
@@ -109,15 +111,15 @@ export default function Settings() {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">{t('currency')}</label>
-            <select className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <label className="text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('currency')}</label>
+            <select className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none">
               <option value="CHF">CHF - Franc suisse</option>
               <option value="EUR">EUR - Euro</option>
             </select>
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">{t('taxRate')}</label>
-            <select className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <label className="text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('taxRate')}</label>
+            <select className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none">
               <option value="7.7">7.7% (TVA Suisse normale)</option>
               <option value="3.7">3.7% (TVA Suisse réduite)</option>
               <option value="2.5">2.5% (TVA Suisse super réduite)</option>
@@ -126,25 +128,25 @@ export default function Settings() {
             </select>
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-1 block">Numéro IDE / TVA</label>
+            <label className="text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">Numéro IDE / TVA</label>
             <input
               type="text"
               defaultValue="CHE-123.456.789 TVA"
-              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
             />
           </div>
         </div>
       </div>
 
       {/* Payment Methods */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
+      <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl border border-[#EFECE6] dark:border-[#342D26] p-6 shadow-xs">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-            <CreditCard size={20} className="text-purple-600" />
+          <div className="w-10 h-10 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] border border-[#EFECE6] dark:border-[#342D26] rounded-xl flex items-center justify-center">
+            <CreditCard size={20} />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-800">{t('paymentMethods')}</h3>
-            <p className="text-sm text-slate-500">Modes de paiement acceptés</p>
+            <h3 className="font-bold text-base text-[#1A1816] dark:text-[#F8F6F0]">{t('paymentMethods')}</h3>
+            <p className="text-xs text-[#6B635B] dark:text-[#A89F95]">Modes de paiement acceptés</p>
           </div>
         </div>
         <div className="space-y-3">
@@ -156,13 +158,13 @@ export default function Settings() {
             { name: 'Carte cadeau', nameEn: 'Gift Card', nameDe: 'Geschenkkarte', enabled: false },
             { name: 'Paiement mixte', nameEn: 'Split Payment', nameDe: 'Teilzahlung', enabled: true },
           ].map((method, i) => (
-            <div key={i} className="flex items-center justify-between py-3 border-b border-slate-50 last:border-0">
-              <span className="text-sm font-medium text-slate-700">
+            <div key={i} className="flex items-center justify-between py-3 border-b border-[#EFECE6] dark:border-[#342D26] last:border-0">
+              <span className="text-sm font-semibold text-[#1A1816] dark:text-[#F8F6F0]">
                 {language === 'en' ? method.nameEn : language === 'de' ? method.nameDe : method.name}
               </span>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" defaultChecked={method.enabled} className="sr-only peer" />
-                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                <div className="w-11 h-6 bg-[#E5DDD2] dark:bg-[#342D26] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#A87B43]/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#A87B43]"></div>
               </label>
             </div>
           ))}
@@ -170,14 +172,14 @@ export default function Settings() {
       </div>
 
       {/* Receipt Settings */}
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
+      <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl border border-[#EFECE6] dark:border-[#342D26] p-6 shadow-xs">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-            <Receipt size={20} className="text-amber-600" />
+          <div className="w-10 h-10 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] border border-[#EFECE6] dark:border-[#342D26] rounded-xl flex items-center justify-center">
+            <Receipt size={20} />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-800">{t('receipts')}</h3>
-            <p className="text-sm text-slate-500">Configuration des reçus</p>
+            <h3 className="font-bold text-base text-[#1A1816] dark:text-[#F8F6F0]">{t('receipts')}</h3>
+            <p className="text-xs text-[#6B635B] dark:text-[#A89F95]">Configuration des reçus</p>
           </div>
         </div>
         <div className="space-y-3">
@@ -187,11 +189,11 @@ export default function Settings() {
             { label: language === 'en' ? 'Include store logo' : language === 'de' ? 'Filiallogo einbeziehen' : 'Inclure le logo du magasin', enabled: true },
             { label: language === 'en' ? 'Show itemized receipt' : language === 'de' ? 'Detaillierten Beleg anzeigen' : 'Afficher le reçu détaillé', enabled: true },
           ].map((setting, i) => (
-            <div key={i} className="flex items-center justify-between py-3 border-b border-slate-50 last:border-0">
-              <span className="text-sm font-medium text-slate-700">{setting.label}</span>
+            <div key={i} className="flex items-center justify-between py-3 border-b border-[#EFECE6] dark:border-[#342D26] last:border-0">
+              <span className="text-sm font-semibold text-[#1A1816] dark:text-[#F8F6F0]">{setting.label}</span>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" defaultChecked={setting.enabled} className="sr-only peer" />
-                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                <div className="w-11 h-6 bg-[#E5DDD2] dark:bg-[#342D26] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#A87B43]/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#A87B43]"></div>
               </label>
             </div>
           ))}

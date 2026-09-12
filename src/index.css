@@ -2,42 +2,75 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Coffee Shop Color Palette */
+/* Warm Cream & Ochre Palette (Refined Boutique POS) */
 :root {
-  /* Primary Colors */
-  --coffee-dark: #906b33;
-  --coffee-cream: #f4f1e9;
-  --coffee-gold: #e3b36c;
-  --coffee-light: #f6f5fa;
-  --coffee-medium: #a6885b;
-  --coffee-tan: #b8a587;
+  /* Brand Accents */
+  --brand-ochre: #a87b43;
+  --brand-caramel: #b58236;
+  --brand-gold: #c59e58;
+  --brand-gold-light: #f4e8d3;
+  --brand-espresso: #1a1816;
   
   /* Semantic Colors */
-  --bg-primary: #f6f5fa;
+  --bg-primary: #f8f6f0;
   --bg-secondary: #ffffff;
-  --bg-tertiary: #f4f1e9;
-  --text-primary: #906b33;
-  --text-secondary: #a6885b;
-  --text-muted: #b8a587;
-  --accent: #e3b36c;
-  --border: #e3b36c33;
+  --bg-tertiary: #f1ece1;
+  --bg-pill: #f0eae1;
+  --text-primary: #1a1816;
+  --text-secondary: #6b635b;
+  --text-muted: #9c9388;
+  --accent: #a87b43;
+  --border: #efece6;
+  --border-subtle: #f4f0e8;
+  
+  /* Status Badges */
+  --status-completed-bg: #eaf2fd;
+  --status-completed-text: #2563eb;
+  --status-pending-bg: #fef3e7;
+  --status-pending-text: #b45309;
+  --status-pill-bg: #f5ebe1;
+  --status-pill-text: #a87b43;
+
+  /* Legacy aliases for backward compatibility */
+  --coffee-dark: #a87b43;
+  --coffee-cream: #f8f6f0;
+  --coffee-gold: #c59e58;
+  --coffee-light: #ffffff;
+  --coffee-medium: #6b635b;
+  --coffee-tan: #9c9388;
   
   /* Status Colors */
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
-  --info: #3b82f6;
+  --info: #2563eb;
 }
 
 .dark {
-  --bg-primary: #1a1410;
-  --bg-secondary: #2a2018;
-  --bg-tertiary: #3a2f25;
-  --text-primary: #f4f1e9;
-  --text-secondary: #e3b36c;
-  --text-muted: #b8a587;
+  --bg-primary: #181512;
+  --bg-secondary: #221e1a;
+  --bg-tertiary: #2c2620;
+  --bg-pill: #2a241e;
+  --text-primary: #f8f6f0;
+  --text-secondary: #d1c7bd;
+  --text-muted: #8c837a;
   --accent: #e3b36c;
-  --border: #e3b36c44;
+  --border: #342d26;
+  --border-subtle: #2d2620;
+  
+  --status-completed-bg: #1e293b;
+  --status-completed-text: #60a5fa;
+  --status-pending-bg: #3d2616;
+  --status-pending-text: #f59e0b;
+  --status-pill-bg: #33271d;
+  --status-pill-text: #e3b36c;
+
+  --coffee-dark: #e3b36c;
+  --coffee-cream: #221e1a;
+  --coffee-gold: #e3b36c;
+  --coffee-light: #2c2620;
+  --coffee-medium: #d1c7bd;
+  --coffee-tan: #8c837a;
 }
 
 /* Base styles */
@@ -247,5 +280,69 @@ tbody tr:nth-child(even) {
 
 .coffee-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(227, 179, 108, 0.1);
+  box-shadow: 0 0 0 3px rgba(168, 123, 67, 0.15);
 }
+
+/* Warm Boutique POS Refined Components */
+.warm-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 20px -2px rgba(28, 24, 20, 0.03), 0 1px 3px rgba(28, 24, 20, 0.02);
+  transition: all 0.2s ease;
+}
+
+.warm-card:hover {
+  box-shadow: 0 8px 25px -4px rgba(28, 24, 20, 0.06), 0 2px 4px rgba(28, 24, 20, 0.03);
+}
+
+.warm-pill-input {
+  background-color: var(--bg-pill);
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.warm-pill-input:focus {
+  border-color: var(--accent);
+  background-color: var(--bg-secondary);
+  box-shadow: 0 0 0 3px rgba(168, 123, 67, 0.12);
+}
+
+.status-badge-completed {
+  background-color: var(--status-completed-bg);
+  color: var(--status-completed-text);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-badge-pending {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending-text);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-badge-pill {
+  background-color: var(--status-pill-bg);
+  color: var(--status-pill-text);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+

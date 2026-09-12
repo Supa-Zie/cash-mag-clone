@@ -31,38 +31,47 @@ export default function Products() {
   });
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto" style={{ backgroundColor: '#f6f5fa' }}>
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1600px] mx-auto min-h-full bg-[#F8F6F0] dark:bg-[#181512] text-[#1A1816] dark:text-[#F8F6F0]">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">{t('products')}</h1>
-          <p className="text-slate-500 text-sm">{filteredProducts.length} {t('products').toLowerCase()}</p>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl sm:text-3xl font-black text-[#A87B43] dark:text-[#E3B36C] tracking-tight">
+              CashMag
+            </span>
+            <span className="text-2xl sm:text-3xl font-bold text-[#1A1816] dark:text-[#F8F6F0]">
+              {t('products')}
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-[#6B635B] dark:text-[#A89F95] mt-1">
+            {filteredProducts.length} {t('products').toLowerCase()} répertoriés
+          </p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-[#A87B43] hover:bg-[#906B33] text-white rounded-full font-bold text-xs sm:text-sm transition-all shadow-xs active:scale-95 self-start sm:self-auto"
         >
-          <Plus size={18} />
-          <span className="font-medium">{t('addProduct')}</span>
+          <Plus size={16} />
+          <span>{t('addProduct')}</span>
         </button>
       </div>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9C9388]" />
           <input
             type="text"
             placeholder={t('searchProducts')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-[#221E1A] border border-[#EFECE6] dark:border-[#342D26] rounded-full text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] placeholder-[#9C9388] outline-none focus:border-[#A87B43] focus:ring-2 focus:ring-[#A87B43]/15 transition-all shadow-2xs"
           />
         </div>
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="px-4 py-2.5 bg-white dark:bg-[#221E1A] border border-[#EFECE6] dark:border-[#342D26] rounded-full text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43] shadow-2xs cursor-pointer"
         >
           <option value="all">{t('all')}</option>
           {categories.filter(c => c.id !== 'all').map(cat => (
@@ -72,54 +81,64 @@ export default function Products() {
       </div>
 
       {/* Products Table */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="warm-card bg-white dark:bg-[#221E1A] border border-[#EFECE6] dark:border-[#342D26] rounded-2xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">{t('productName')}</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">{t('category')}</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">{t('price')}</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">{t('barcode')}</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">{t('stock')}</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">{t('status')}</th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Actions</th>
+              <tr className="bg-[#FAF8F3] dark:bg-[#25201A] border-b border-[#EFECE6] dark:border-[#342D26] text-[#9C9388] font-bold">
+                <th className="px-4 py-3.5 uppercase text-[11px] tracking-wider">{t('productName')}</th>
+                <th className="px-4 py-3.5 uppercase text-[11px] tracking-wider">{t('category')}</th>
+                <th className="px-4 py-3.5 uppercase text-[11px] tracking-wider">{t('price')}</th>
+                <th className="px-4 py-3.5 uppercase text-[11px] tracking-wider">{t('barcode')}</th>
+                <th className="px-4 py-3.5 uppercase text-[11px] tracking-wider">{t('stock')}</th>
+                <th className="px-4 py-3.5 uppercase text-[11px] tracking-wider">{t('status')}</th>
+                <th className="px-4 py-3.5 uppercase text-[11px] tracking-wider text-right">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-[#EFECE6] dark:divide-[#2C2620]">
               {filteredProducts.map((product) => (
-                <tr key={product.id} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                  <td className="px-4 py-3">
+                <tr key={product.id} className="hover:bg-[#FAF8F3]/70 dark:hover:bg-[#28221B]/40 transition-colors">
+                  <td className="px-4 py-3.5">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-slate-100 rounded-lg flex items-center justify-center">
-                        <Package size={16} className="text-slate-400" />
+                      <div className="w-8 h-8 bg-[#F8F6F0] dark:bg-[#2A241E] rounded-xl flex items-center justify-center flex-shrink-0 text-[#A87B43] border border-[#EFECE6]/60 dark:border-[#342D26]">
+                        <Package size={16} />
                       </div>
-                      <span className="text-sm font-medium text-slate-700">{getProductNames(product)}</span>
+                      <span className="font-bold text-[#1A1816] dark:text-[#F8F6F0]">{getProductNames(product)}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className="text-sm text-slate-600 bg-slate-100 px-2 py-1 rounded">{getCategoryName(product.category)}</span>
+                  <td className="px-4 py-3.5">
+                    <span className="text-xs font-semibold text-[#A87B43] bg-[#F5EBE1] dark:bg-[#33271D] px-2.5 py-1 rounded-full inline-block">
+                      {getCategoryName(product.category)}
+                    </span>
                   </td>
-                  <td className="px-4 py-3 text-sm font-semibold text-slate-800">{product.price.toFixed(2)} CHF</td>
-                  <td className="px-4 py-3 text-sm text-slate-500 font-mono">{product.barcode || '—'}</td>
-                  <td className="px-4 py-3">
-                    <span className={`text-sm font-medium ${product.stock <= product.reorderPoint ? 'text-amber-600' : 'text-slate-700'}`}>
+                  <td className="px-4 py-3.5 font-bold text-[#A87B43] whitespace-nowrap">
+                    {product.price.toFixed(2)} <span className="text-xs text-[#9C9388]">CHF</span>
+                  </td>
+                  <td className="px-4 py-3.5 text-[#6B635B] dark:text-[#A89F95] font-mono text-[11px]">
+                    {product.barcode || '—'}
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <span className={`font-bold ${product.stock <= product.reorderPoint ? 'text-[#B45309]' : 'text-[#1A1816] dark:text-[#F8F6F0]'}`}>
                       {product.stock}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                      product.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
-                    }`}>
-                      {product.status === 'active' ? t('active') : t('archived')}
-                    </span>
+                  <td className="px-4 py-3.5 whitespace-nowrap">
+                    {product.status === 'active' ? (
+                      <span className="status-badge-completed">
+                        {t('active')}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-[#F0EAE1] dark:bg-[#2C2620] text-[#9C9388]">
+                        {t('archived')}
+                      </span>
+                    )}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                  <td className="px-4 py-3.5 text-right">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <button className="p-1.5 text-[#9C9388] hover:text-[#A87B43] hover:bg-[#F0EAE1] dark:hover:bg-[#2C2620] rounded-lg transition-colors">
                         <Edit2 size={14} />
                       </button>
-                      <button className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
+                      <button className="p-1.5 text-[#9C9388] hover:text-[#DC2626] hover:bg-[#FEECEC] dark:hover:bg-[#381B1B] rounded-lg transition-colors">
                         <Trash2 size={14} />
                       </button>
                     </div>
@@ -133,27 +152,27 @@ export default function Products() {
 
       {/* Add Product Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-slate-800">{t('addProduct')}</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-600">
-                <X size={20} />
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-in">
+          <div className="bg-white dark:bg-[#221E1A] rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-[#EFECE6] dark:border-[#342D26] relative">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-lg font-bold text-[#1A1816] dark:text-[#F8F6F0]">{t('addProduct')}</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-[#9C9388] hover:text-[#1A1816] dark:hover:text-[#F8F6F0] p-1.5 rounded-lg">
+                <X size={18} />
               </button>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-700 mb-1 block">{t('productName')}</label>
-                <input type="text" className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                <label className="text-xs font-bold text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('productName')}</label>
+                <input type="text" className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">{t('price')} (CHF)</label>
-                  <input type="number" step="0.01" className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                  <label className="text-xs font-bold text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('price')} (CHF)</label>
+                  <input type="number" step="0.01" className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">{t('category')}</label>
-                  <select className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <label className="text-xs font-bold text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('category')}</label>
+                  <select className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]">
                     {categories.filter(c => c.id !== 'all').map(cat => (
                       <option key={cat.id} value={cat.id}>{getCategoryName(cat.id)}</option>
                     ))}
@@ -162,19 +181,19 @@ export default function Products() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">{t('barcode')}</label>
-                  <input type="text" className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                  <label className="text-xs font-bold text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('barcode')}</label>
+                  <input type="text" className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">{t('stock')}</label>
-                  <input type="number" className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                  <label className="text-xs font-bold text-[#6B635B] dark:text-[#A89F95] mb-1.5 block">{t('stock')}</label>
+                  <input type="number" className="w-full px-3.5 py-2.5 bg-[#FAF8F3] dark:bg-[#28221B] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] outline-none focus:border-[#A87B43]" />
                 </div>
               </div>
               <div className="flex gap-3 pt-4">
-                <button onClick={() => setShowAddModal(false)} className="flex-1 py-2.5 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50">
+                <button onClick={() => setShowAddModal(false)} className="flex-1 py-2.5 border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-xs font-semibold text-[#6B635B] dark:text-[#A89F95] hover:bg-[#F0EAE1] dark:hover:bg-[#2C2620] transition-colors">
                   {t('cancel')}
                 </button>
-                <button onClick={() => setShowAddModal(false)} className="flex-1 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
+                <button onClick={() => setShowAddModal(false)} className="flex-1 py-2.5 bg-[#A87B43] hover:bg-[#906B33] text-white rounded-xl text-xs font-bold transition-colors shadow-xs">
                   {t('save')}
                 </button>
               </div>

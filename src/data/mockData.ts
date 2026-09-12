@@ -31,13 +31,13 @@ export interface CartItem {
 }
 
 export const categories = [
-  { id: 'all', name: 'Tout', nameEn: 'All', nameDe: 'Alle', color: '#6366f1' },
-  { id: 'drinks', name: 'Boissons', nameEn: 'Drinks', nameDe: 'Getränke', color: '#3b82f6' },
-  { id: 'food', name: 'Alimentation', nameEn: 'Food', nameDe: 'Lebensmittel', color: '#10b981' },
-  { id: 'bakery', name: 'Boulangerie', nameEn: 'Bakery', nameDe: 'Bäckerei', color: '#f59e0b' },
-  { id: 'snacks', name: 'Snacks', nameEn: 'Snacks', nameDe: 'Snacks', color: '#ef4444' },
-  { id: 'hygiene', name: 'Hygiène', nameEn: 'Hygiene', nameDe: 'Hygiene', color: '#8b5cf6' },
-  { id: 'tobacco', name: 'Tabac', nameEn: 'Tobacco', nameDe: 'Tabak', color: '#6b7280' },
+  { id: 'all', name: 'Tout', nameEn: 'All', nameDe: 'Alle', color: '#a87b43' },
+  { id: 'drinks', name: 'Boissons', nameEn: 'Drinks', nameDe: 'Getränke', color: '#c59e58' },
+  { id: 'food', name: 'Alimentation', nameEn: 'Food', nameDe: 'Lebensmittel', color: '#906b33' },
+  { id: 'bakery', name: 'Boulangerie', nameEn: 'Bakery', nameDe: 'Bäckerei', color: '#b58236' },
+  { id: 'snacks', name: 'Snacks', nameEn: 'Snacks', nameDe: 'Snacks', color: '#d4af37' },
+  { id: 'hygiene', name: 'Hygiène', nameEn: 'Hygiene', nameDe: 'Hygiene', color: '#9c8262' },
+  { id: 'tobacco', name: 'Tabac', nameEn: 'Tobacco', nameDe: 'Tabak', color: '#6b5e52' },
 ];
 
 export const products: Product[] = [

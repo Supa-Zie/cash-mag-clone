@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Building2, Phone, Mail, MapPin, Plus, Edit2, Trash2, Truck, Package, AlertTriangle, CheckCircle, Clock, X, Search, Star, TrendingUp } from 'lucide-react';
+import { Building2, Phone, Mail, MapPin, Plus, Edit2, Trash2, Truck, Package, AlertTriangle, Clock, X, Search, Star, TrendingUp } from 'lucide-react';
 
 interface Supplier {
   id: string;
@@ -34,7 +34,6 @@ export default function Suppliers() {
   const { t } = useApp();
   const [activeTab, setActiveTab] = useState<'suppliers' | 'orders'>('suppliers');
   const [showModal, setShowModal] = useState(false);
-  const [showOrderModal, setShowOrderModal] = useState(false);
   const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -136,7 +135,7 @@ export default function Suppliers() {
     },
   ]);
 
-  const [orders, setOrders] = useState<Order[]>([
+  const [orders] = useState<Order[]>([
     {
       id: 'ORD-001',
       supplierId: '3',
@@ -228,12 +227,12 @@ export default function Suppliers() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-amber-100 text-amber-700';
-      case 'confirmed': return 'bg-blue-100 text-blue-700';
-      case 'shipped': return 'bg-purple-100 text-purple-700';
-      case 'delivered': return 'bg-emerald-100 text-emerald-700';
-      case 'cancelled': return 'bg-red-100 text-red-700';
-      default: return 'bg-slate-100 text-slate-500';
+      case 'pending': return 'bg-[#FEF3E7] text-[#B45309] dark:bg-[#3D2616] dark:text-[#F59E0B]';
+      case 'confirmed': return 'bg-[#FAF4ED] text-[#A87B43] dark:bg-[#2D241C] dark:text-[#C59E58]';
+      case 'shipped': return 'bg-[#FEF3E7] text-[#B45309] dark:bg-[#3D2616] dark:text-[#F59E0B]';
+      case 'delivered': return 'bg-[#EAF2FD] text-[#2563EB] dark:bg-[#1E293B] dark:text-[#60A5FA]';
+      case 'cancelled': return 'bg-[#FEECEC] text-[#DC2626] dark:bg-[#381B1B] dark:text-[#F87171]';
+      default: return 'bg-[#F0EAE1] text-[#6B635B] dark:bg-[#2D241C] dark:text-[#A89F95]';
     }
   };
 
@@ -318,16 +317,16 @@ export default function Suppliers() {
   };
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto" style={{ backgroundColor: '#f6f5fa' }}>
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto bg-[#F8F6F0] dark:bg-[#181512] min-h-screen text-[#1A1816] dark:text-[#F8F6F0]">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Fournisseurs & Commandes</h1>
-          <p className="text-slate-500 text-sm">Gérez vos fournisseurs et suivez vos commandes</p>
+          <h1 className="text-2xl font-bold tracking-tight text-[#1A1816] dark:text-[#F8F6F0]">Fournisseurs & Commandes</h1>
+          <p className="text-[#6B635B] dark:text-[#A89F95] text-sm mt-0.5">Gérez vos fournisseurs et suivez vos commandes</p>
         </div>
         <button
           onClick={() => { resetForm(); setEditingSupplier(null); setShowModal(true); }}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#A87B43] hover:bg-[#906B33] text-white rounded-full text-sm font-bold shadow-xs transition-all self-start sm:self-auto"
         >
           <Plus size={16} />
           Nouveau fournisseur
@@ -335,222 +334,241 @@ export default function Suppliers() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4 sm:p-5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <Building2 size={20} className="text-emerald-600" />
+            <div className="w-10 h-10 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] rounded-xl flex items-center justify-center">
+              <Building2 size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-800">{suppliers.filter(s => s.status === 'active').length}</p>
-              <p className="text-xs text-slate-500">Fournisseurs actifs</p>
+              <p className="text-2xl font-bold text-[#1A1816] dark:text-[#F8F6F0]">{suppliers.filter(s => s.status === 'active').length}</p>
+              <p className="text-xs text-[#6B635B] dark:text-[#A89F95] font-medium">Fournisseurs actifs</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4 sm:p-5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Truck size={20} className="text-blue-600" />
+            <div className="w-10 h-10 bg-[#FEF3E7] dark:bg-[#3D2616] text-[#B45309] rounded-xl flex items-center justify-center">
+              <Truck size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-800">{pendingOrders}</p>
-              <p className="text-xs text-slate-500">Commandes en cours</p>
+              <p className="text-2xl font-bold text-[#1A1816] dark:text-[#F8F6F0]">{pendingOrders}</p>
+              <p className="text-xs text-[#6B635B] dark:text-[#A89F95] font-medium">Commandes en cours</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4 sm:p-5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-              <AlertTriangle size={20} className="text-amber-600" />
+            <div className="w-10 h-10 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] rounded-xl flex items-center justify-center">
+              <AlertTriangle size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-800">{lowStockAlerts}</p>
-              <p className="text-xs text-slate-500">Délais courts (≤2j)</p>
+              <p className="text-2xl font-bold text-[#1A1816] dark:text-[#F8F6F0]">{lowStockAlerts}</p>
+              <p className="text-xs text-[#6B635B] dark:text-[#A89F95] font-medium">Délais courts (≤2j)</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-slate-200">
+
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4 sm:p-5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <TrendingUp size={20} className="text-purple-600" />
+            <div className="w-10 h-10 bg-[#EAF2FD] dark:bg-[#1E293B] text-[#2563EB] rounded-xl flex items-center justify-center">
+              <TrendingUp size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-800">{totalSpent.toFixed(0)} CHF</p>
-              <p className="text-xs text-slate-500">Total dépensé</p>
+              <p className="text-2xl font-bold text-[#1A1816] dark:text-[#F8F6F0]">{totalSpent.toFixed(0)} CHF</p>
+              <p className="text-xs text-[#6B635B] dark:text-[#A89F95] font-medium">Total dépensé</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg p-1 w-fit">
+      <div className="flex items-center gap-1.5 bg-white dark:bg-[#221E1A] border border-[#EFECE6] dark:border-[#342D26] rounded-full p-1.5 w-fit shadow-xs">
         <button
           onClick={() => setActiveTab('suppliers')}
-          className={`px-4 py-2 rounded text-sm font-medium transition-all ${
-            activeTab === 'suppliers' ? 'bg-emerald-100 text-emerald-700' : 'text-slate-500 hover:text-slate-700'
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all ${
+            activeTab === 'suppliers' 
+              ? 'bg-[#A87B43] text-white shadow-xs' 
+              : 'text-[#6B635B] dark:text-[#A89F95] hover:text-[#1A1816] dark:hover:text-white'
           }`}
         >
-          <span className="flex items-center gap-2"><Building2 size={14} /> Fournisseurs</span>
+          <Building2 size={14} /> Fournisseurs
         </button>
         <button
           onClick={() => setActiveTab('orders')}
-          className={`px-4 py-2 rounded text-sm font-medium transition-all ${
-            activeTab === 'orders' ? 'bg-emerald-100 text-emerald-700' : 'text-slate-500 hover:text-slate-700'
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all ${
+            activeTab === 'orders' 
+              ? 'bg-[#A87B43] text-white shadow-xs' 
+              : 'text-[#6B635B] dark:text-[#A89F95] hover:text-[#1A1816] dark:hover:text-white'
           }`}
         >
-          <span className="flex items-center gap-2"><Package size={14} /> Commandes ({pendingOrders})</span>
+          <Package size={14} /> Commandes ({pendingOrders})
         </button>
       </div>
 
       {/* Suppliers Tab */}
       {activeTab === 'suppliers' && (
-        <>
+        <div className="space-y-4">
           {/* Search */}
-          <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div className="relative max-w-md">
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9C9388]" />
             <input
               type="text"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               placeholder="Rechercher un fournisseur..."
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="w-full pl-11 pr-4 py-2 bg-white dark:bg-[#221E1A] border border-[#EFECE6] dark:border-[#342D26] rounded-full text-xs sm:text-sm text-[#1A1816] dark:text-[#F8F6F0] placeholder-[#9C9388] focus:border-[#A87B43] focus:ring-2 focus:ring-[#A87B43]/20 outline-none shadow-xs"
             />
           </div>
 
           {/* Supplier Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {filteredSuppliers.map((supplier) => (
-              <div key={supplier.id} className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow">
+              <div key={supplier.id} className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl border border-[#EFECE6] dark:border-[#342D26] p-5 shadow-xs hover:border-[#A87B43]/50 transition-all">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center">
-                      <Building2 size={20} className="text-slate-600" />
+                    <div className="w-11 h-11 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] border border-[#EFECE6] dark:border-[#342D26] rounded-xl flex items-center justify-center">
+                      <Building2 size={20} />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-slate-800">{supplier.name}</h3>
-                      <span className="text-xs text-slate-500">{supplier.category}</span>
+                      <h3 className="font-bold text-base text-[#1A1816] dark:text-[#F8F6F0]">{supplier.name}</h3>
+                      <span className="text-xs text-[#6B635B] dark:text-[#A89F95] font-medium">{supplier.category}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => handleEditSupplier(supplier)} className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
-                      <Edit2 size={14} className="text-slate-400" />
+                    <button 
+                      onClick={() => handleEditSupplier(supplier)} 
+                      className="p-1.5 text-[#6B635B] hover:text-[#1A1816] hover:bg-[#FAF4ED] dark:hover:bg-[#2D241C] rounded-lg transition-colors"
+                    >
+                      <Edit2 size={15} />
                     </button>
-                    <button onClick={() => handleDeleteSupplier(supplier.id)} className="p-1.5 hover:bg-red-50 rounded-lg transition-colors">
-                      <Trash2 size={14} className="text-red-400" />
+                    <button 
+                      onClick={() => handleDeleteSupplier(supplier.id)} 
+                      className="p-1.5 text-[#6B635B] hover:text-[#DC2626] hover:bg-[#FEECEC] dark:hover:bg-[#381B1B] rounded-lg transition-colors"
+                    >
+                      <Trash2 size={15} />
                     </button>
                   </div>
                 </div>
 
-                <div className="space-y-2 mb-3">
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <Phone size={12} className="text-slate-400" />
+                <div className="space-y-2 mb-4 text-xs sm:text-sm text-[#6B635B] dark:text-[#A89F95]">
+                  <div className="flex items-center gap-2">
+                    <Phone size={13} className="text-[#A87B43]" />
                     <span>{supplier.phone}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <Mail size={12} className="text-slate-400" />
+                  <div className="flex items-center gap-2">
+                    <Mail size={13} className="text-[#A87B43]" />
                     <span>{supplier.email}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <MapPin size={12} className="text-slate-400" />
+                  <div className="flex items-center gap-2">
+                    <MapPin size={13} className="text-[#A87B43]" />
                     <span className="truncate">{supplier.address}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-between pt-3 border-t border-[#EFECE6] dark:border-[#342D26]">
                   <div className="flex items-center gap-1">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} size={12} className={i < Math.floor(supplier.rating) ? 'text-amber-400 fill-amber-400' : 'text-slate-200'} />
+                      <Star 
+                        key={i} 
+                        size={13} 
+                        className={i < Math.floor(supplier.rating) ? 'text-[#A87B43] fill-[#A87B43]' : 'text-[#EFECE6] dark:text-[#342D26]'} 
+                      />
                     ))}
-                    <span className="text-xs text-slate-500 ml-1">{supplier.rating}</span>
+                    <span className="text-xs font-semibold text-[#1A1816] dark:text-[#F8F6F0] ml-1">{supplier.rating}</span>
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-slate-500">
-                    <span className="flex items-center gap-1"><Clock size={10} /> {supplier.leadTime}j</span>
+                  <div className="flex items-center gap-3 text-xs text-[#6B635B] dark:text-[#A89F95] font-medium">
+                    <span className="flex items-center gap-1"><Clock size={11} /> {supplier.leadTime}j</span>
                     <span>{supplier.totalOrders} cmd.</span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
 
       {/* Orders Tab */}
       {activeTab === 'orders' && (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-200">
-              <tr>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase">Réf.</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase">Fournisseur</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase">Date</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase">Articles</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase">Total</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase">Statut</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase">Livraison prévue</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3 text-sm font-medium text-slate-800">{order.id}</td>
-                  <td className="px-4 py-3 text-sm text-slate-600">{order.supplierName}</td>
-                  <td className="px-4 py-3 text-sm text-slate-600">{order.date}</td>
-                  <td className="px-4 py-3 text-sm text-slate-600">{order.items.length} articles</td>
-                  <td className="px-4 py-3 text-sm font-medium text-slate-800">{order.total.toFixed(2)} CHF</td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getStatusBadge(order.status)}`}>
-                      {getStatusLabel(order.status)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-slate-600">{order.expectedDelivery}</td>
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl border border-[#EFECE6] dark:border-[#342D26] overflow-hidden shadow-xs">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-[#FAF8F3] dark:bg-[#25201A] border-b border-[#EFECE6] dark:border-[#342D26]">
+                <tr>
+                  <th className="text-left px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-[#9C9388]">Réf.</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-[#9C9388]">Fournisseur</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-[#9C9388]">Date</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-[#9C9388]">Articles</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-[#9C9388]">Total</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-[#9C9388]">Statut</th>
+                  <th className="text-left px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-[#9C9388]">Livraison prévue</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-[#EFECE6] dark:divide-[#342D26]">
+                {orders.map((order) => (
+                  <tr key={order.id} className="hover:bg-[#FAF8F3]/70 dark:hover:bg-[#28221B]/40 transition-colors">
+                    <td className="px-5 py-3.5 text-sm font-bold text-[#1A1816] dark:text-[#F8F6F0]">{order.id}</td>
+                    <td className="px-5 py-3.5 text-sm font-medium text-[#1A1816] dark:text-[#F8F6F0]">{order.supplierName}</td>
+                    <td className="px-5 py-3.5 text-xs text-[#6B635B] dark:text-[#A89F95]">{order.date}</td>
+                    <td className="px-5 py-3.5 text-xs text-[#6B635B] dark:text-[#A89F95]">{order.items.length} articles</td>
+                    <td className="px-5 py-3.5 text-sm font-bold text-[#A87B43]">{order.total.toFixed(2)} CHF</td>
+                    <td className="px-5 py-3.5">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${getStatusBadge(order.status)}`}>
+                        {getStatusLabel(order.status)}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-xs text-[#6B635B] dark:text-[#A89F95]">{order.expectedDelivery}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {/* Supplier Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
-          <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-slate-800">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
+          <div className="bg-white dark:bg-[#221E1A] rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-[#EFECE6] dark:border-[#342D26] shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="p-6 border-b border-[#EFECE6] dark:border-[#342D26] flex items-center justify-between">
+              <h2 className="text-lg font-bold text-[#1A1816] dark:text-[#F8F6F0]">
                 {editingSupplier ? 'Modifier le fournisseur' : 'Nouveau fournisseur'}
               </h2>
-              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-slate-100 rounded-lg">
-                <X size={20} />
+              <button onClick={() => setShowModal(false)} className="p-2 hover:bg-[#FAF4ED] dark:hover:bg-[#2D241C] text-[#6B635B] rounded-full transition-colors">
+                <X size={18} />
               </button>
             </div>
 
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Nom de l'entreprise</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5">Nom de l'entreprise</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={e => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] placeholder-[#9C9388] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
                   placeholder="Ex: Coca-Cola Suisse SA"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Personne de contact</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5">Personne de contact</label>
                   <input
                     type="text"
                     value={formData.contact}
                     onChange={e => setFormData({ ...formData, contact: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Catégorie</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5">Catégorie</label>
                   <select
                     value={formData.category}
                     onChange={e => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
                   >
                     <option value="">Sélectionner...</option>
                     <option value="Boissons">Boissons</option>
@@ -565,67 +583,67 @@ export default function Suppliers() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5">Email</label>
                   <input
                     type="email"
                     value={formData.email}
                     onChange={e => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Téléphone</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5">Téléphone</label>
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Adresse</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5">Adresse</label>
                 <input
                   type="text"
                   value={formData.address}
                   onChange={e => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                  className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Délai de livraison (jours)</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5">Délai de livraison (jours)</label>
                   <input
                     type="number"
                     value={formData.leadTime}
                     onChange={e => setFormData({ ...formData, leadTime: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Commande min. (CHF)</label>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#6B635B] dark:text-[#A89F95] mb-1.5">Commande min. (CHF)</label>
                   <input
                     type="number"
                     value={formData.minOrder}
                     onChange={e => setFormData({ ...formData, minOrder: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                    className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B18] border border-[#EFECE6] dark:border-[#342D26] rounded-xl text-sm text-[#1A1816] dark:text-[#F8F6F0] focus:ring-2 focus:ring-[#A87B43]/20 focus:border-[#A87B43] outline-none"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="p-6 border-t border-slate-200 flex items-center justify-end gap-3">
+            <div className="p-6 border-t border-[#EFECE6] dark:border-[#342D26] flex items-center justify-end gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50"
+                className="px-5 py-2.5 border border-[#EFECE6] dark:border-[#342D26] rounded-full text-xs sm:text-sm font-semibold text-[#6B635B] dark:text-[#A89F95] hover:bg-[#FAF4ED] dark:hover:bg-[#2D241C] transition-colors"
               >
                 Annuler
               </button>
               <button
                 onClick={handleSaveSupplier}
-                className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700"
+                className="px-5 py-2.5 bg-[#A87B43] hover:bg-[#906B33] text-white rounded-full text-xs sm:text-sm font-bold shadow-xs transition-colors"
               >
                 {editingSupplier ? 'Mettre à jour' : 'Ajouter le fournisseur'}
               </button>

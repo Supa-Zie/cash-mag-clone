@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { Clock, ChefHat, CheckCircle, AlertTriangle, Timer, Flame, X } from 'lucide-react';
+import { Clock, ChefHat, CheckCircle, AlertTriangle, Timer, Flame } from 'lucide-react';
 
 interface KitchenOrder {
   id: string;
@@ -133,21 +133,11 @@ export default function KitchenDisplay() {
     setOrders(prev => prev.filter(o => o.id !== orderId));
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending': return 'border-amber-400 bg-amber-50 dark:bg-amber-900/10';
-      case 'preparing': return 'border-blue-400 bg-blue-50 dark:bg-blue-900/10';
-      case 'ready': return 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/10';
-      case 'served': return 'border-slate-300 bg-slate-50 dark:bg-slate-800';
-      default: return 'border-slate-200';
-    }
-  };
-
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-500 text-white';
-      case 'high': return 'bg-orange-500 text-white';
-      default: return 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300';
+      case 'urgent': return 'bg-[#FEECEC] text-[#DC2626] dark:bg-[#381B1B] dark:text-[#F87171]';
+      case 'high': return 'bg-[#FEF3E7] text-[#B45309] dark:bg-[#3D2616] dark:text-[#F59E0B]';
+      default: return 'bg-[#F0EAE1] text-[#6B635B] dark:bg-[#2D241C] dark:text-[#A89F95]';
     }
   };
 
@@ -156,71 +146,73 @@ export default function KitchenDisplay() {
   const readyCount = orders.filter(o => o.status === 'ready').length;
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto min-h-screen" style={{ backgroundColor: '#f6f5fa' }}>
+    <div className="p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto bg-[#F8F6F0] dark:bg-[#181512] min-h-screen text-[#1A1816] dark:text-[#F8F6F0]">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
-            <ChefHat size={22} className="text-orange-600 dark:text-orange-400" />
+          <div className="w-10 h-10 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] border border-[#EFECE6] dark:border-[#342D26] rounded-xl flex items-center justify-center">
+            <ChefHat size={22} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Affichage Cuisine</h1>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">Kitchen Display System</p>
+            <h1 className="text-2xl font-bold tracking-tight text-[#1A1816] dark:text-[#F8F6F0]">Affichage Cuisine</h1>
+            <p className="text-[#6B635B] dark:text-[#A89F95] text-sm">Kitchen Display System</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900/30 rounded-full">
-            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">En direct</span>
-          </div>
+        <div className="flex items-center gap-2 px-3.5 py-1.5 bg-[#FAF4ED] dark:bg-[#2D241C] border border-[#E8DEC8] dark:border-[#4A3B2C] rounded-full self-start sm:self-auto">
+          <div className="w-2 h-2 bg-[#A87B43] rounded-full animate-pulse" />
+          <span className="text-xs font-bold text-[#A87B43]">En direct</span>
         </div>
       </div>
 
       {/* Stats Bar */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4 sm:p-5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">{pendingCount}</p>
-              <p className="text-sm text-slate-500 dark:text-slate-400">En attente</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#B45309]">{pendingCount}</p>
+              <p className="text-xs sm:text-sm text-[#6B635B] dark:text-[#A89F95] font-medium">En attente</p>
             </div>
-            <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
-              <Clock size={24} className="text-amber-600 dark:text-amber-400" />
+            <div className="w-11 h-11 bg-[#FEF3E7] dark:bg-[#3D2616] text-[#B45309] rounded-xl flex items-center justify-center">
+              <Clock size={22} />
             </div>
           </div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4 sm:p-5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">{preparingCount}</p>
-              <p className="text-sm text-slate-500 dark:text-slate-400">En préparation</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#A87B43]">{preparingCount}</p>
+              <p className="text-xs sm:text-sm text-[#6B635B] dark:text-[#A89F95] font-medium">En préparation</p>
             </div>
-            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-              <Flame size={24} className="text-blue-600 dark:text-blue-400" />
+            <div className="w-11 h-11 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] rounded-xl flex items-center justify-center">
+              <Flame size={22} />
             </div>
           </div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
+
+        <div className="warm-card bg-white dark:bg-[#221E1A] rounded-2xl p-4 sm:p-5 border border-[#EFECE6] dark:border-[#342D26] shadow-xs">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{readyCount}</p>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Prêtes</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#2563EB]">{readyCount}</p>
+              <p className="text-xs sm:text-sm text-[#6B635B] dark:text-[#A89F95] font-medium">Prêtes</p>
             </div>
-            <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
-              <CheckCircle size={24} className="text-emerald-600 dark:text-emerald-400" />
+            <div className="w-11 h-11 bg-[#EAF2FD] dark:bg-[#1E293B] text-[#2563EB] rounded-xl flex items-center justify-center">
+              <CheckCircle size={22} />
             </div>
           </div>
         </div>
       </div>
 
       {/* Filter */}
-      <div className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-1 w-fit">
+      <div className="flex items-center gap-1.5 bg-white dark:bg-[#221E1A] border border-[#EFECE6] dark:border-[#342D26] rounded-full p-1.5 w-fit shadow-xs">
         {(['all', 'pending', 'preparing', 'ready'] as const).map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded text-sm font-medium transition-all ${
-              filter === f ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'
+            className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all ${
+              filter === f 
+                ? 'bg-[#A87B43] text-white shadow-xs' 
+                : 'text-[#6B635B] dark:text-[#A89F95] hover:text-[#1A1816] dark:hover:text-white'
             }`}
           >
             {f === 'all' ? 'Toutes' : f === 'pending' ? 'En attente' : f === 'preparing' ? 'En préparation' : 'Prêtes'}
@@ -233,98 +225,104 @@ export default function KitchenDisplay() {
         {filteredOrders.map((order) => (
           <div
             key={order.id}
-            className={`rounded-xl border-2 p-4 transition-all ${getStatusColor(order.status)} ${
-              isDelayed(order) ? 'ring-2 ring-red-400 ring-offset-2' : ''
-            }`}
+            className={`warm-card bg-white dark:bg-[#221E1A] rounded-2xl border p-5 shadow-xs transition-all flex flex-col justify-between ${
+              order.status === 'ready' ? 'border-[#2563EB]/50' :
+              order.status === 'preparing' ? 'border-[#A87B43]/50' :
+              'border-[#EFECE6] dark:border-[#342D26]'
+            } ${isDelayed(order) ? 'ring-2 ring-[#DC2626]/60 ring-offset-2' : ''}`}
           >
-            {/* Order Header */}
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-slate-800 dark:text-white">{order.orderNumber}</span>
-                <span className="px-2 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-xs font-medium text-slate-700 dark:text-slate-300">
-                  {order.table}
-                </span>
-                {order.priority !== 'normal' && (
-                  <span className={`px-2 py-0.5 rounded text-xs font-bold ${getPriorityBadge(order.priority)}`}>
-                    {order.priority === 'urgent' ? '🔥 URGENT' : '⚡ PRIORITÉ'}
+            <div>
+              {/* Order Header */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold text-[#1A1816] dark:text-[#F8F6F0]">{order.orderNumber}</span>
+                  <span className="px-2.5 py-0.5 bg-[#FAF4ED] dark:bg-[#2D241C] text-[#A87B43] rounded-lg text-xs font-bold border border-[#E8DEC8] dark:border-[#4A3B2C]">
+                    {order.table}
+                  </span>
+                  {order.priority !== 'normal' && (
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${getPriorityBadge(order.priority)}`}>
+                      {order.priority === 'urgent' ? '🔥 URGENT' : '⚡ PRIORITÉ'}
+                    </span>
+                  )}
+                </div>
+                <div className={`flex items-center gap-1 text-xs font-semibold ${
+                  isDelayed(order) ? 'text-[#DC2626]' : 'text-[#6B635B] dark:text-[#A89F95]'
+                }`}>
+                  {isDelayed(order) ? <AlertTriangle size={13} /> : <Timer size={13} />}
+                  <span>{getElapsedTime(order.timestamp)}</span>
+                </div>
+              </div>
+
+              {/* Waiter & Notes */}
+              <div className="flex items-center gap-2 mb-3 text-xs text-[#6B635B] dark:text-[#A89F95]">
+                <span>👤 {order.waiter}</span>
+                {order.notes && (
+                  <span className="px-2 py-0.5 bg-[#FEF3E7] dark:bg-[#3D2616] text-[#B45309] font-medium rounded-md">
+                    ⚠️ {order.notes}
                   </span>
                 )}
               </div>
-              <div className={`flex items-center gap-1 text-xs font-medium ${
-                isDelayed(order) ? 'text-red-600' : 'text-slate-500'
-              }`}>
-                {isDelayed(order) ? <AlertTriangle size={12} /> : <Timer size={12} />}
-                <span>{getElapsedTime(order.timestamp)}</span>
+
+              {/* Items */}
+              <div className="space-y-2 mb-4">
+                {order.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`flex items-center justify-between p-2.5 rounded-xl border transition-all ${
+                      item.status === 'ready' 
+                        ? 'bg-[#EAF2FD]/50 dark:bg-[#1E293B]/40 border-[#2563EB]/20' 
+                        : item.status === 'preparing' 
+                        ? 'bg-[#FAF4ED]/50 dark:bg-[#2D241C]/40 border-[#A87B43]/20' 
+                        : 'bg-[#FAF8F3] dark:bg-[#25201A] border-[#EFECE6] dark:border-[#342D26]'
+                    }`}
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-[#1A1816] dark:text-[#F8F6F0]">{item.quantity}x</span>
+                        <span className={`text-sm font-medium ${item.status === 'ready' ? 'line-through text-[#9C9388]' : 'text-[#1A1816] dark:text-[#F8F6F0]'}`}>
+                          {item.name}
+                        </span>
+                      </div>
+                      {item.modifiers.length > 0 && (
+                        <p className="text-xs text-[#B45309] ml-6 mt-0.5 font-medium">
+                          → {item.modifiers.join(', ')}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {item.status === 'pending' && (
+                        <button
+                          onClick={() => updateItemStatus(order.id, item.id, 'preparing')}
+                          className="p-1.5 bg-[#A87B43] text-white rounded-lg hover:bg-[#906B33] transition-colors"
+                          title="Commencer la préparation"
+                        >
+                          <Flame size={13} />
+                        </button>
+                      )}
+                      {item.status === 'preparing' && (
+                        <button
+                          onClick={() => updateItemStatus(order.id, item.id, 'ready')}
+                          className="p-1.5 bg-[#2563EB] text-white rounded-lg hover:bg-[#1D4ED8] transition-colors"
+                          title="Marquer comme prêt"
+                        >
+                          <CheckCircle size={13} />
+                        </button>
+                      )}
+                      {item.status === 'ready' && (
+                        <CheckCircle size={16} className="text-[#2563EB]" />
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Waiter & Notes */}
-            <div className="flex items-center gap-2 mb-3 text-xs text-slate-500 dark:text-slate-400">
-              <span>👤 {order.waiter}</span>
-              {order.notes && (
-                <span className="px-2 py-0.5 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded">
-                  ⚠️ {order.notes}
-                </span>
-              )}
-            </div>
-
-            {/* Items */}
-            <div className="space-y-2 mb-4">
-              {order.items.map((item) => (
-                <div
-                  key={item.id}
-                  className={`flex items-center justify-between p-2 rounded-lg ${
-                    item.status === 'ready' ? 'bg-emerald-100/50 dark:bg-emerald-900/20' :
-                    item.status === 'preparing' ? 'bg-blue-100/50 dark:bg-blue-900/20' :
-                    'bg-white/50 dark:bg-slate-700/50'
-                  }`}
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-slate-800 dark:text-white">{item.quantity}x</span>
-                      <span className={`text-sm ${item.status === 'ready' ? 'line-through text-slate-400' : 'text-slate-700 dark:text-slate-200'}`}>
-                        {item.name}
-                      </span>
-                    </div>
-                    {item.modifiers.length > 0 && (
-                      <p className="text-xs text-orange-600 dark:text-orange-400 ml-6 mt-0.5">
-                        → {item.modifiers.join(', ')}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    {item.status === 'pending' && (
-                      <button
-                        onClick={() => updateItemStatus(order.id, item.id, 'preparing')}
-                        className="p-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                        title="Commencer la préparation"
-                      >
-                        <Flame size={12} />
-                      </button>
-                    )}
-                    {item.status === 'preparing' && (
-                      <button
-                        onClick={() => updateItemStatus(order.id, item.id, 'ready')}
-                        className="p-1.5 bg-emerald-500 text-white rounded hover:bg-emerald-600 transition-colors"
-                        title="Marquer comme prêt"
-                      >
-                        <CheckCircle size={12} />
-                      </button>
-                    )}
-                    {item.status === 'ready' && (
-                      <CheckCircle size={16} className="text-emerald-500" />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
             {/* Action Buttons */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 pt-2">
               {order.status !== 'ready' && (
                 <button
                   onClick={() => markOrderReady(order.id)}
-                  className="flex-1 py-2 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors flex items-center justify-center gap-1"
+                  className="flex-1 py-2.5 bg-[#A87B43] hover:bg-[#906B33] text-white rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors flex items-center justify-center gap-1.5"
                 >
                   <CheckCircle size={14} />
                   Tout prêt
@@ -333,7 +331,7 @@ export default function KitchenDisplay() {
               {order.status === 'ready' && (
                 <button
                   onClick={() => markOrderServed(order.id)}
-                  className="flex-1 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors flex items-center justify-center gap-1"
+                  className="flex-1 py-2.5 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors flex items-center justify-center gap-1.5"
                 >
                   <CheckCircle size={14} />
                   Servi
@@ -345,10 +343,10 @@ export default function KitchenDisplay() {
       </div>
 
       {filteredOrders.length === 0 && (
-        <div className="text-center py-16">
-          <ChefHat size={48} className="mx-auto text-slate-300 dark:text-slate-600 mb-4" />
-          <p className="text-lg text-slate-500 dark:text-slate-400">Aucune commande à afficher</p>
-          <p className="text-sm text-slate-400 dark:text-slate-500">Les nouvelles commandes apparaîtront ici</p>
+        <div className="text-center py-20">
+          <ChefHat size={48} className="mx-auto text-[#9C9388] mb-4 opacity-50" />
+          <p className="text-base font-bold text-[#1A1816] dark:text-[#F8F6F0]">Aucune commande à afficher</p>
+          <p className="text-xs text-[#6B635B] dark:text-[#A89F95] mt-1">Les nouvelles commandes apparaîtront ici</p>
         </div>
       )}
     </div>

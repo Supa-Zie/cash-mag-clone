@@ -13,10 +13,10 @@ export function SyncStatusIndicator() {
   return (
     <div className="flex items-center gap-2">
       {/* Online/Offline indicator */}
-      <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${
+      <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${
         syncStatus.isOnline 
-          ? 'bg-emerald-50 text-emerald-700' 
-          : 'bg-red-50 text-red-700'
+          ? 'bg-[#EAF7ED] text-[#1E7E34] dark:bg-[#1A3320] dark:text-[#4ADE80]' 
+          : 'bg-[#FEECEC] text-[#DC2626] dark:bg-[#381B1B] dark:text-[#F87171]'
       }`}>
         {syncStatus.isOnline ? (
           <>
@@ -36,10 +36,10 @@ export function SyncStatusIndicator() {
         <button
           onClick={handleClick}
           disabled={syncStatus.syncInProgress}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
             syncStatus.syncInProgress
-              ? 'bg-blue-50 text-blue-700 cursor-not-allowed'
-              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              ? 'bg-[#FEF3E7] text-[#B45309] dark:bg-[#3D2616] dark:text-[#F59E0B] cursor-not-allowed'
+              : 'bg-[#F0EAE1] text-[#6B635B] hover:bg-[#E5DDD2] dark:bg-[#2A241E] dark:text-[#C5BCB2] dark:hover:bg-[#352D25]'
           }`}
           title={syncStatus.syncInProgress ? 'Synchronisation en cours...' : 'Synchroniser les données'}
         >
